@@ -122,7 +122,7 @@
     user-select: none;
   }
   .item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: color-mix(in srgb, var(--md-sys-color-on-surface) 5%, transparent);
     color: var(--md-sys-color-on-surface);
   }
   .item.is-active {

@@ -58,7 +58,7 @@
     top: 0;
     z-index: 40;
     width: 100%;
-    background: rgba(13, 15, 18, 0.82);
+    background: color-mix(in srgb, var(--md-sys-color-surface) 82%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--md-sys-color-outline-variant);

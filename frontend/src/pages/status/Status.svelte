@@ -222,7 +222,7 @@
   }
   .opt:hover {
     color: var(--md-sys-color-on-surface);
-    background: rgba(255, 255, 255, 0.05);
+    background: color-mix(in srgb, var(--md-sys-color-on-surface) 5%, transparent);
   }
   .opt.is-active {
     background: var(--md-sys-color-secondary-container);

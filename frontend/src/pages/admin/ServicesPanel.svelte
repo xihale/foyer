@@ -78,7 +78,7 @@
 
   .watch {
     flex-shrink: 0;
-    border: 1px solid rgba(133, 217, 150, 0.3);
+    border: 1px solid color-mix(in srgb, var(--md-sys-color-success) 35%, transparent);
     background: var(--md-sys-color-success-container);
     padding: 2px 8px;
     border-radius: var(--md-sys-shape-corner-small);

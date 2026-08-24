@@ -1,105 +1,104 @@
 /* ==========================================================================
-   Material Design 3 (Material You) Design Tokens - Pro Dark Theme
-   Refined Tonal Palette, High-Precision Contrast & Mature Motion
+   foyer Design Tokens — "Warm Paper" Theme
+   暖纸白底 · 杏桃点缀 · 轻盈投影 · 朴实耐看,大方可爱
    ========================================================================== */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* ---- M3 Color Roles (Deep Slate & High-Precision Indigo Accent) ---- */
-  --md-sys-color-primary: #a8c7fa;
-  --md-sys-color-on-primary: #062e6f;
-  --md-sys-color-primary-container: #1b3f73;
-  --md-sys-color-on-primary-container: #d3e3fd;
+  /* ---- Core Color Roles ---- */
+  --md-sys-color-primary: #c96a45;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #f9e2d6;
+  --md-sys-color-on-primary-container: #74371e;
 
-  --md-sys-color-secondary: #c2c7d0;
-  --md-sys-color-on-secondary: #2c313a;
-  --md-sys-color-secondary-container: #3d434e;
-  --md-sys-color-on-secondary-container: #e0e2ec;
+  --md-sys-color-secondary: #6d7265;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #eae6da;
+  --md-sys-color-on-secondary-container: #3f423a;
 
-  --md-sys-color-tertiary: #7bd0c8;
-  --md-sys-color-on-tertiary: #003734;
-  --md-sys-color-tertiary-container: #194e4b;
-  --md-sys-color-on-tertiary-container: #a6ede5;
+  --md-sys-color-tertiary: #a08b4f;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #efe6cb;
+  --md-sys-color-on-tertiary-container: #57481c;
 
-  --md-sys-color-error: #f2b8b5;
-  --md-sys-color-on-error: #601410;
-  --md-sys-color-error-container: #8c1d18;
-  --md-sys-color-on-error-container: #f9dedc;
+  --md-sys-color-error: #bd5048;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #fadcd7;
+  --md-sys-color-on-error-container: #67231d;
 
-  /* ---- M3 Semantic Status Indicators (Calm & Professional) ---- */
-  --md-sys-color-success: #6dd58c;
-  --md-sys-color-on-success: #003919;
-  --md-sys-color-success-container: #0f5228;
-  --md-sys-color-on-success-container: #aff4be;
+  /* ---- Semantic Status ---- */
+  --md-sys-color-success: #4e9166;
+  --md-sys-color-on-success: #ffffff;
+  --md-sys-color-success-container: #dbe9d8;
+  --md-sys-color-on-success-container: #1d4429;
 
-  --md-sys-color-warning: #f5be42;
-  --md-sys-color-on-warning: #3f2e00;
-  --md-sys-color-warning-container: #5b4300;
-  --md-sys-color-on-warning-container: #ffe086;
+  --md-sys-color-warning: #bb8a30;
+  --md-sys-color-on-warning: #ffffff;
+  --md-sys-color-warning-container: #f3e5c0;
+  --md-sys-color-on-warning-container: #5c420e;
 
-  /* ---- M3 Surface Container Elevation System (Deep Slate Tones) ---- */
-  --md-sys-color-background: #0d0f12;
-  --md-sys-color-on-background: #e2e4ea;
-  --md-sys-color-surface: #0d0f12;
-  --md-sys-color-on-surface: #e2e4ea;
-  --md-sys-color-surface-dim: #0d0f12;
-  --md-sys-color-surface-bright: #34373e;
+  /* ---- Surface Elevation (warm paper steps) ---- */
+  --md-sys-color-background: #f7f4ee;
+  --md-sys-color-on-background: #33362f;
+  --md-sys-color-surface: #f7f4ee;
+  --md-sys-color-on-surface: #33362f;
+  --md-sys-color-surface-dim: #eae7df;
+  --md-sys-color-surface-bright: #fffcf5;
 
-  --md-sys-color-surface-container-lowest: #090b0e;
-  --md-sys-color-surface-container-low: #14171c;
-  --md-sys-color-surface-container: #181c22;
-  --md-sys-color-surface-container-high: #21262d;
-  --md-sys-color-surface-container-highest: #2b313a;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #fcfaf5;
+  --md-sys-color-surface-container: #f3f0e8;
+  --md-sys-color-surface-container-high: #edeade;
+  --md-sys-color-surface-container-highest: #e6e3d8;
 
-  --md-sys-color-surface-variant: #40454e;
-  --md-sys-color-on-surface-variant: #c4c7d0;
-  --md-sys-color-outline: rgba(255, 255, 255, 0.18);
-  --md-sys-color-outline-variant: rgba(255, 255, 255, 0.08);
+  --md-sys-color-surface-variant: #e2ded1;
+  --md-sys-color-on-surface-variant: #666b60;
+  --md-sys-color-outline: rgba(51, 54, 47, 0.24);
+  --md-sys-color-outline-variant: rgba(51, 54, 47, 0.1);
 
-  --md-sys-color-inverse-surface: #e2e4ea;
-  --md-sys-color-inverse-on-surface: #2b2f36;
-  --md-sys-color-inverse-primary: #0b57d0;
-  --md-sys-color-scrim: #000000;
+  --md-sys-color-inverse-surface: #33362f;
+  --md-sys-color-inverse-on-surface: #f4f1ea;
+  --md-sys-color-inverse-primary: #ffb59a;
+  --md-sys-color-scrim: rgba(40, 38, 30, 0.4);
 
-  /* ---- M3 State Layer Opacities ---- */
-  --md-sys-state-hover-opacity: 0.06;
+  /* ---- State Layers ---- */
+  --md-sys-state-hover-opacity: 0.05;
   --md-sys-state-focus-opacity: 0.1;
-  --md-sys-state-pressed-opacity: 0.1;
-  --md-sys-state-dragged-opacity: 0.14;
+  --md-sys-state-pressed-opacity: 0.08;
 
-  /* ---- M3 Shape System (Refined & Proportioned) ---- */
+  /* ---- Shape (圆润一点,可爱但不幼稚) ---- */
   --md-sys-shape-corner-none: 0px;
-  --md-sys-shape-corner-extra-small: 4px;
-  --md-sys-shape-corner-small: 6px;
-  --md-sys-shape-corner-medium: 10px;
-  --md-sys-shape-corner-large: 14px;
-  --md-sys-shape-corner-extra-large: 20px;
+  --md-sys-shape-corner-extra-small: 6px;
+  --md-sys-shape-corner-small: 9px;
+  --md-sys-shape-corner-medium: 13px;
+  --md-sys-shape-corner-large: 17px;
+  --md-sys-shape-corner-extra-large: 24px;
   --md-sys-shape-corner-full: 9999px;
 
-  /* ---- M3 Motion & Easing (Crisp, Non-Bouncy) ---- */
+  /* ---- Motion ---- */
   --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
-  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --md-sys-motion-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
-  --md-sys-motion-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
-
-  --md-sys-motion-duration-short1: 50ms;
-  --md-sys-motion-duration-short2: 100ms;
   --md-sys-motion-duration-short3: 150ms;
   --md-sys-motion-duration-short4: 200ms;
   --md-sys-motion-duration-medium1: 250ms;
-  --md-sys-motion-duration-medium2: 300ms;
 
-  /* ---- M3 Elevation (Crisp, Understated Ambient Shadow) ---- */
+  /* ---- Elevation (浅色底用柔和投影替代描边堆叠) ---- */
   --md-sys-elevation-level0: none;
-  --md-sys-elevation-level1: 0 1px 2px rgba(0, 0, 0, 0.24), 0 1px 3px 1px rgba(0, 0, 0, 0.12);
-  --md-sys-elevation-level2: 0 2px 6px rgba(0, 0, 0, 0.28), 0 1px 2px rgba(0, 0, 0, 0.16);
-  --md-sys-elevation-level3: 0 4px 12px rgba(0, 0, 0, 0.36), 0 2px 4px rgba(0, 0, 0, 0.2);
-  --md-sys-elevation-level4: 0 8px 20px rgba(0, 0, 0, 0.42), 0 4px 8px rgba(0, 0, 0, 0.24);
+  --md-sys-elevation-level1: 0 1px 2px rgba(74, 66, 50, 0.06);
+  --md-sys-elevation-level2:
+    0 1px 2px rgba(74, 66, 50, 0.07),
+    0 4px 12px rgba(74, 66, 50, 0.07);
+  --md-sys-elevation-level3: 0 10px 32px rgba(74, 66, 50, 0.18);
+  --md-sys-elevation-level4: 0 18px 48px rgba(74, 66, 50, 0.24);
 
-  /* ---- Default System Typography Stack ---- */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  /* ---- Typography ---- */
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-mono:
+    ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
+    monospace;
 
   /* ========================================================================
      Compatibility / Semantic Aliases
@@ -112,28 +111,28 @@
 
   --line: var(--md-sys-color-outline-variant);
   --line-2: var(--md-sys-color-outline);
-  --line-light: rgba(255, 255, 255, 0.06);
+  --line-light: rgba(51, 54, 47, 0.05);
 
   --text-1: var(--md-sys-color-on-surface);
   --text-2: var(--md-sys-color-on-surface-variant);
-  --text-3: #8a8f9b;
-  --text-4: #5a5f6b;
+  --text-3: #90958a;
+  --text-4: #b3b7ab;
 
   --ok: var(--md-sys-color-success);
   --ok-2: var(--md-sys-color-on-success-container);
-  --ok-glow: rgba(109, 213, 140, 0.25);
+  --ok-glow: rgba(78, 145, 102, 0.25);
 
   --warn: var(--md-sys-color-warning);
   --warn-2: var(--md-sys-color-on-warning-container);
-  --warn-glow: rgba(245, 190, 66, 0.25);
+  --warn-glow: rgba(187, 138, 48, 0.25);
 
   --err: var(--md-sys-color-error);
   --err-2: var(--md-sys-color-on-error-container);
-  --err-dim: rgba(242, 184, 181, 0.12);
+  --err-dim: rgba(189, 80, 72, 0.1);
 
   --accent: var(--md-sys-color-primary);
-  --accent-2: #c2e7ff;
-  --accent-dim: rgba(168, 199, 250, 0.12);
+  --accent-2: var(--md-sys-color-on-primary-container);
+  --accent-dim: rgba(201, 106, 69, 0.11);
 
   --radius-xs: var(--md-sys-shape-corner-extra-small);
   --radius-s: var(--md-sys-shape-corner-small);
@@ -142,11 +141,10 @@
   --radius-xl: var(--md-sys-shape-corner-extra-large);
   --radius-full: var(--md-sys-shape-corner-full);
 
-  --transition: 140ms var(--md-sys-motion-easing-standard);
-  --transition-spring: 180ms var(--md-sys-motion-easing-standard);
+  --transition: 160ms cubic-bezier(0.2, 0, 0, 1);
+  --transition-spring: 200ms cubic-bezier(0.2, 0, 0, 1);
 
   --shadow-sm: var(--md-sys-elevation-level1);
   --shadow-card: var(--md-sys-elevation-level2);
   --shadow-pop: var(--md-sys-elevation-level3);
 }
-
