@@ -13,6 +13,7 @@
     value.startsWith(ICONS_PREFIX) ? value.slice(ICONS_PREFIX.length).split('?')[0] : '',
   )
   const initial = $derived((label.trim()[0] ?? '?').toUpperCase())
+  let bust = $state(0) // 同名覆盖后预览破缓存
   // 回显 value 自 config 可能带 ?v=（服务端 mtime 版本号）；bust 破缓存前先剥旧 query 防叠加
   const previewSrc = $derived(bust && currentName ? `${value.split('?')[0]}?v=${bust}` : value)
 
@@ -25,7 +26,6 @@
   let urlDirty = $state(false)
   let busy = $state<'fetch' | 'upload' | null>(null)
   let err = $state('')
-  let bust = $state(0) // 同名覆盖后预览破缓存
 
   function originOf(u: string): string | null {
     try {
