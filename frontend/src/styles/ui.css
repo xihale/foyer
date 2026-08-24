@@ -1,0 +1,424 @@
+/* ==========================================================================
+   Material Design 3 Pro UI Component Library
+   Subtle State Layers, Mature Elevation, High-Precision Layout
+   ========================================================================== */
+
+/* ===== 状态指示点 (Material 3 Status Indicator) ===== */
+
+.dot {
+  position: relative;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--md-sys-shape-corner-full);
+  flex-shrink: 0;
+  background: var(--text-4);
+  transition: background-color var(--transition), box-shadow var(--transition);
+}
+.dot[data-state='up'] {
+  background: var(--md-sys-color-success);
+  box-shadow: 0 0 6px var(--ok-glow);
+}
+.dot[data-state='down'] {
+  background: var(--md-sys-color-error);
+  box-shadow: 0 0 6px rgba(242, 184, 181, 0.35);
+}
+.dot.warn {
+  background: var(--md-sys-color-warning);
+  box-shadow: 0 0 6px var(--warn-glow);
+}
+
+/* 沉稳呼吸（仅微弱不透明度呼吸，不改变尺寸/缩放） */
+.dot.pulse {
+  animation: dot-glow 3s ease-in-out infinite;
+}
+
+@keyframes dot-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+/* ===== 容器体系 (M3 Surface Containers) ===== */
+
+/* 静态信息卡 (M3 Outlined Card) */
+.card {
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level1);
+  padding: 18px 20px;
+}
+
+/* 可交互条目卡 (M3 Interactive Surface Card - 沉稳无跳动) */
+.card-item {
+  position: relative;
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level1);
+  overflow: hidden;
+  transition:
+    border-color var(--transition),
+    background-color var(--transition),
+    box-shadow var(--transition);
+}
+.card-item:hover {
+  border-color: var(--md-sys-color-outline);
+  background: var(--md-sys-color-surface-container);
+  box-shadow: var(--md-sys-elevation-level2);
+}
+.card-item:active {
+  background: var(--md-sys-color-surface-container-high);
+}
+
+/* 后台列表容器 (M3 Outlined Container) */
+.list {
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  overflow: hidden;
+  box-shadow: var(--md-sys-elevation-level1);
+}
+.list > * + * {
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* 后台列表行通用骨架 (M3 List Item) */
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 16px;
+  transition: background-color var(--transition);
+}
+.list-row:hover {
+  background: var(--md-sys-color-surface-container);
+}
+
+.list-icon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: var(--md-sys-shape-corner-small);
+  object-fit: contain;
+}
+.list-icon.fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--md-sys-color-surface-container-highest);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.list-info {
+  min-width: 0;
+  flex: 1;
+}
+.list-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.list-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list-sub {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--md-sys-color-on-surface-variant);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 状态摘要条 / KPI容器 (M3 Stat Card) */
+.stat {
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+/* ===== 表单体系 (Material 3 Outlined Text Field) ===== */
+
+.input,
+.select {
+  width: 100%;
+  background: var(--md-sys-color-surface-container-highest);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 8px 12px;
+  font-size: 13.5px;
+  color: var(--md-sys-color-on-surface);
+  outline: none;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background-color var(--transition);
+}
+.input::placeholder,
+.select::placeholder {
+  color: var(--text-4);
+}
+.input:hover,
+.select:hover {
+  border-color: var(--md-sys-color-outline);
+}
+.input:focus,
+.select:focus {
+  background: var(--md-sys-color-surface-container-high);
+  border-color: var(--md-sys-color-primary);
+  box-shadow: 0 0 0 1px var(--md-sys-color-primary);
+}
+.select {
+  cursor: pointer;
+}
+
+.field-label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: 5px;
+}
+.field-hint {
+  font-size: 11.5px;
+  color: var(--text-3);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* M3 Checkbox */
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  user-select: none;
+}
+.check:hover {
+  color: var(--md-sys-color-on-surface);
+}
+.check input {
+  accent-color: var(--md-sys-color-primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+}
+
+/* ===== 按钮体系 (Material 3 Buttons - 精炼成熟) ===== */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: var(--md-sys-shape-corner-full);
+  padding: 7px 16px;
+  min-height: 34px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--md-sys-color-on-surface-variant);
+  background: transparent;
+  user-select: none;
+  outline: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    box-shadow var(--transition);
+}
+.btn:disabled {
+  pointer-events: none;
+  opacity: 0.38;
+}
+.btn:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+/* M3 Filled Button (Primary) */
+.btn-primary {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  font-weight: 600;
+  box-shadow: var(--md-sys-elevation-level1);
+}
+.btn-primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--md-sys-color-primary) 92%, white);
+  box-shadow: var(--md-sys-elevation-level2);
+}
+.btn-primary:active:not(:disabled) {
+  background: color-mix(in srgb, var(--md-sys-color-primary) 85%, black);
+}
+
+/* M3 Filled Tonal Button (Secondary) */
+.btn-secondary {
+  background: var(--md-sys-color-secondary-container);
+  border-color: transparent;
+  color: var(--md-sys-color-on-secondary-container);
+  font-weight: 500;
+}
+.btn-secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--md-sys-color-secondary-container) 88%, white);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* M3 Danger Button (Error Container) */
+.btn-danger {
+  background: var(--md-sys-color-error-container);
+  border-color: transparent;
+  color: var(--md-sys-color-on-error-container);
+}
+.btn-danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--md-sys-color-error-container) 85%, white);
+}
+
+/* M3 Ghost / Outlined Micro Button */
+.btn-ghost {
+  background: var(--md-sys-color-surface-container-high);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  padding: 4px 10px;
+  min-height: 28px;
+  font-size: 12px;
+  color: var(--md-sys-color-on-surface-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: var(--md-sys-color-surface-container-highest);
+  border-color: var(--md-sys-color-outline);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* 两步删除确认按钮 */
+.btn-confirm {
+  background: var(--md-sys-color-error);
+  border: 1px solid transparent;
+  color: var(--md-sys-color-on-error);
+  padding: 4px 10px;
+  min-height: 28px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--md-sys-shape-corner-full);
+}
+.btn-confirm:hover:not(:disabled) {
+  background: #f87171;
+}
+
+/* M3 Icon Button / Close Button */
+.btn-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: var(--md-sys-shape-corner-full);
+  padding: 0;
+  font-size: 13px;
+  color: var(--md-sys-color-on-surface-variant);
+  outline: none;
+  transition: background-color var(--transition), color var(--transition);
+}
+.btn-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* M3 Navigation Pill (Header / Nav Link) */
+.link-nav {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--md-sys-shape-corner-full);
+  padding: 5px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+  outline: none;
+  transition:
+    color var(--transition),
+    background-color var(--transition);
+}
+.link-nav:hover {
+  color: var(--md-sys-color-on-surface);
+  background: rgba(255, 255, 255, 0.05);
+}
+.link-nav.is-active {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font-weight: 600;
+}
+
+/* ===== 徽标 / 辅助标签 (M3 Badge & Assist Chips) ===== */
+
+.badge {
+  flex-shrink: 0;
+  background: var(--md-sys-color-surface-container-highest);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 1px 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.page-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+  letter-spacing: -0.01em;
+}
+.page-sub {
+  margin-top: 3px;
+  font-size: 12.5px;
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1.5;
+}
+.group-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+
+.empty {
+  padding: 48px 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-4);
+}
+
+.alert {
+  background: var(--md-sys-color-error-container);
+  border: 1px solid rgba(242, 184, 181, 0.3);
+  border-radius: var(--md-sys-shape-corner-medium);
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--md-sys-color-on-error-container);
+}
+
+

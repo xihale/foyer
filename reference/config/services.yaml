@@ -1,0 +1,45 @@
+- 自建服务:
+    - FreshRSS:
+        icon: freshrss.png
+        href: https://fresh.xeed.ink
+        description: RSS 阅读器
+        siteMonitor: https://fresh.xeed.ink
+        server: my-docker
+        container: freshrss_new
+    - Memos:
+        icon: memos.png
+        href: https://memos.xeed.ink
+        description: 备忘录
+        siteMonitor: https://memos.xeed.ink
+        server: my-docker
+        container: memos
+    - ntfy:
+        icon: ntfy.png
+        href: https://ntfy.xeed.ink
+        description: 推送通知
+        siteMonitor: https://ntfy.xeed.ink
+        server: my-docker
+        container: ntfy
+    - Uptime Kuma:
+        icon: uptime-kuma.png
+        href: https://status.xeed.ink
+        description: 服务监控
+        siteMonitor: https://status.xeed.ink
+- 公开站点:
+    - pcpp:
+        icon: si-cplusplus
+        href: https://pcpp.xihale.top
+        description: Professional C++ 第 6 版 中文版
+        siteMonitor: https://pcpp.xihale.top
+    - LinkSheet:
+        icon: si-linktree
+        href: https://linksheet.xihale.top
+        description: LinkSheet 文档
+        siteMonitor: https://linksheet.xihale.top
+    - ShareBin:
+        icon: https://s.xeed.ink/favicon.svg
+        href: https://s.xeed.ink
+        description: 粘贴分享
+        siteMonitor: https://s.xeed.ink
+        server: my-docker
+        container: sharebin-app

@@ -1,0 +1,48 @@
+- 常用:
+  - Mikan:
+    - icon: https://mikanani.me/favicon.ico
+      href: https://mikanani.me/
+  - TestIPv6:
+    - icon: https://testipv6.cn/images/favicon.ico
+      href: https://testipv6.cn/
+  - MetaCubeX:
+    - icon: si-metacubex
+      href: https://wiki.metacubex.one/config/
+  - RackNerd:
+    - icon: https://nerdvm.racknerd.com/favicon.ico
+      href: https://nerdvm.racknerd.com/
+  - 喵喵:
+    - icon: https://miaomiao.moe/favicon.ico
+      href: https://miaomiao.moe/
+  - MinerU:
+    - icon: https://mineru.net/favicon.ico
+      href: https://mineru.net/
+  - TouchGal:
+    - icon: https://www.touchgal.us/favicon.ico
+      href: https://www.touchgal.us/
+  - KUNgal:
+    - icon: https://www.kungal.com/favicon.ico
+      href: https://www.kungal.com/
+  - Two Moons:
+    - icon: http://two-moons.site/favicon.svg
+      href: http://two-moons.site/
+  - CppStat:
+    - icon: https://cppstat.dev/favicon.ico
+      href: https://cppstat.dev/
+
+- 社交:
+  - GitHub:
+    - icon: github.png
+      href: https://github.com/xihale
+  - npm:
+    - icon: npm.png
+      href: https://www.npmjs.com/search?q=xihale
+  - AUR:
+    - icon: arch-linux.png
+      href: https://aur.archlinux.org/account/xihale
+  - 知乎:
+    - icon: https://www.zhihu.com/favicon.ico
+      href: https://www.zhihu.com/people/xihale
+  - Bangumi:
+    - icon: https://bgm.tv/img/favicon.ico
+      href: https://bgm.tv/user/xihale

@@ -1,0 +1,12 @@
+services:
+  foyer:
+    image: ghcr.io/OWNER/foyer:latest
+    container_name: foyer
+    restart: unless-stopped
+    # 容器内须绑 0.0.0.0 端口映射才通；宿主侧已限制只转发到 127.0.0.1
+    environment:
+      - FOYER_BIND=all
+    ports:
+      - "127.0.0.1:3002:3002"
+    volumes:
+      - ./data:/data

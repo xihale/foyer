@@ -1,0 +1,30 @@
+title: gx · 导航
+description: 自建服务的入口
+theme: dark
+color: teal
+headerStyle: clean
+fullWidth: true
+background:
+  image: /images/background.webp
+  blur: sm
+  saturate: 80
+  brightness: 70
+  opacity: 35
+cardBlur: xs
+statusStyle: "dot"
+showStats: true
+hideVersion: true
+disableIndexing: true
+target: _blank
+language: zh-Hans
+layout:
+  自建服务:
+    style: row
+    columns: 4
+  公开站点:
+    style: row
+    columns: 4
+  常用:
+    iconsOnly: true
+  社交:
+    iconsOnly: true

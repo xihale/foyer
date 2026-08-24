@@ -1,0 +1,17 @@
+# foyer 用户级 systemd 单元（无需 root）
+# 安装位置：~/.config/systemd/user/foyer.service
+# 数据目录：%h/.local/state/foyer/data/foyer.db
+[Unit]
+Description=foyer - homepage panel + uptime monitor
+After=network-online.target
+
+[Service]
+ExecStart=%h/.local/bin/foyer
+WorkingDirectory=%h/.local/state/foyer
+# 堆软上限防 GC 懒回收漂移；给足余量不卡性能（实测无限制会漂到 50MB+）
+Environment=GOMEMLIMIT=32MiB
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target
