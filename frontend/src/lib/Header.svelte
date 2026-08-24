@@ -16,30 +16,38 @@
   }
   let { active, label = '', siteTitle = 'foyer', actions, below }: Props = $props()
 
-  const navs: { href: string; key: Route; label: string }[] = [
-    { href: '/', key: 'panel', label: '服务' },
-    { href: '/status', key: 'status', label: '监控' },
-    { href: '/admin', key: 'admin', label: '设置' },
+  const navs: { href: string; key: Route; label: string; index: string }[] = [
+    { href: '/', key: 'panel', label: '服务', index: '01' },
+    { href: '/status', key: 'status', label: '监控', index: '02' },
+    { href: '/admin', key: 'admin', label: '设置', index: '03' },
   ]
 </script>
 
 <header class="header">
   <div class="bar">
     <div class="crumbs">
-      <a class="site" href="/">{siteTitle}</a>
+      <a class="site" href="/">
+        <span class="mark">■</span>
+        <span class="site-name">{siteTitle}</span>
+      </a>
       {#if label}
-        <span class="sep">/</span>
-        <span class="label">{label}</span>
+        <span class="sep" aria-hidden="true">/</span>
+        <span class="label mono">{label}</span>
       {/if}
     </div>
 
     <div class="right">
       {#if actions}
-        {@render actions()}
+        <div class="actions-slot">
+          {@render actions()}
+        </div>
       {/if}
       <nav class="nav" aria-label="页面导航">
         {#each navs as n (n.key)}
-          <a href={n.href} class="link-nav" class:is-active={active === n.key}>{n.label}</a>
+          <a href={n.href} class="link-nav" class:is-active={active === n.key}>
+            <span class="nav-idx mono">{n.index}</span>
+            <span class="nav-text">{n.label}</span>
+          </a>
         {/each}
       </nav>
     </div>
@@ -58,17 +66,17 @@
     top: 0;
     z-index: 40;
     width: 100%;
-    background: color-mix(in srgb, var(--md-sys-color-surface) 82%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--color-border);
   }
 
   .bar {
-    max-width: 68rem;
+    max-width: 72rem;
     margin: 0 auto;
-    height: 54px;
-    padding: 0 18px;
+    height: 52px;
+    padding: 0 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -83,30 +91,44 @@
   .crumbs {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     min-width: 0;
   }
   .site {
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--md-sys-color-on-surface);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: color var(--transition);
   }
   .site:hover {
-    color: var(--md-sys-color-primary);
+    color: var(--color-accent);
+  }
+  .mark {
+    font-size: 10px;
+    color: var(--color-accent);
+    line-height: 1;
+  }
+  .site-name {
+    letter-spacing: -0.02em;
   }
   .sep {
-    font-size: 13px;
-    color: var(--text-4);
+    font-size: 12px;
+    font-family: var(--font-mono);
+    color: var(--color-text-quaternary);
   }
   .label {
-    font-size: 13.5px;
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface-variant);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -115,22 +137,49 @@
   .right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     flex-shrink: 0;
   }
+
+  .actions-slot {
+    display: flex;
+    align-items: center;
+  }
+
   .nav {
     display: flex;
     align-items: center;
-    gap: 3px;
-    background: var(--md-sys-color-surface-container);
-    padding: 3px;
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-full);
+    gap: 2px;
+    background: var(--color-surface-subtle);
+    padding: 2px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-s);
+  }
+
+  .link-nav {
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: var(--radius-xs);
+    font-size: 12px;
+  }
+  .nav-idx {
+    font-size: 10px;
+    opacity: 0.6;
+  }
+  .link-nav.is-active {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-weight: 600;
+  }
+  .link-nav.is-active .nav-idx {
+    opacity: 0.85;
+    color: var(--color-on-accent);
   }
 
   .below {
-    border-top: 1px solid var(--md-sys-color-outline-variant);
-    padding: 8px 18px;
+    border-top: 1px solid var(--color-border);
+    padding: 8px 16px;
+    background: var(--color-surface);
   }
   @media (min-width: 640px) {
     .below {
@@ -138,3 +187,4 @@
     }
   }
 </style>
+

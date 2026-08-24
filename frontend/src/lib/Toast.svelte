@@ -8,12 +8,11 @@
   let { msg, kind }: Props = $props()
 </script>
 
-<!-- 右下角 toast:反馈始终在视线可及处 -->
 <div
-  class="toast"
+  class="toast mono"
   role={kind === 'err' ? 'alert' : 'status'}
   data-kind={kind}
-  transition:fly={{ duration: 150, y: 8, opacity: 0 }}
+  transition:fly={{ duration: 120, y: 6, opacity: 0 }}
 >
   <span class="dot" data-state={kind === 'ok' ? 'up' : 'down'}></span>
   <span class="text">{msg}</span>
@@ -27,24 +26,26 @@
     z-index: 60;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     max-width: min(24rem, calc(100vw - 40px));
-    padding: 10px 16px;
-    background: var(--md-sys-color-inverse-surface);
-    border-radius: var(--md-sys-shape-corner-medium);
-    box-shadow: var(--md-sys-elevation-level3);
-    font-size: 13px;
+    padding: 8px 14px;
+    background: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    font-size: 12px;
     font-weight: 500;
-    color: var(--md-sys-color-inverse-on-surface);
+    color: var(--color-surface);
   }
   .toast[data-kind='ok'] {
-    border-left: 3px solid var(--md-sys-color-success);
+    border-left: 3px solid var(--color-success);
   }
   .toast[data-kind='err'] {
-    border-left: 3px solid var(--md-sys-color-error);
+    border-left: 3px solid var(--color-error);
   }
 
   .text {
     line-height: 1.4;
   }
 </style>
+

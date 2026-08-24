@@ -37,9 +37,9 @@
   .action-group {
     display: inline-flex;
     align-items: center;
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-full);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
     overflow: hidden;
     flex-shrink: 0;
   }
@@ -47,11 +47,11 @@
   .action-btn {
     border: none;
     background: transparent;
-    padding: 3px 10px;
-    min-height: 26px;
-    font-size: 12px;
+    padding: 3px 8px;
+    min-height: 24px;
+    font-size: 11.5px;
     font-weight: 500;
-    color: var(--md-sys-color-on-surface-variant);
+    color: var(--color-text-secondary);
     cursor: pointer;
     outline: none;
     user-select: none;
@@ -59,26 +59,27 @@
     transition: background-color var(--transition), color var(--transition);
   }
   .action-btn:hover {
-    background: var(--md-sys-color-surface-container-high);
-    color: var(--md-sys-color-on-surface);
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
   }
   .action-btn.danger:hover {
-    background: var(--md-sys-color-error-container);
-    color: var(--md-sys-color-on-error-container);
+    background: var(--color-error-bg);
+    color: var(--color-error-text);
   }
   .action-btn.confirm {
-    background: var(--md-sys-color-error);
-    color: var(--md-sys-color-on-error);
+    background: var(--color-error);
+    color: #ffffff;
     font-weight: 600;
   }
   .action-btn.confirm:hover {
-    background: #f87171;
+    background: #b91c1c;
   }
 
   .sep {
     width: 1px;
     height: 12px;
-    background: var(--md-sys-color-outline-variant);
+    background: var(--color-border);
     flex-shrink: 0;
   }
 </style>
+

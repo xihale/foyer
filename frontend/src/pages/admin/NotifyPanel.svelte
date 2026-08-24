@@ -65,7 +65,6 @@
             清除配置
           </button>
         {/if}
-        <!-- 测试用表单当前值,可先测后存 -->
         <button type="button" class="btn btn-secondary" disabled={saving || testing} onclick={ontest}>
           {testing ? '发送中...' : '发送测试'}
         </button>
@@ -81,14 +80,14 @@
   .wrap {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
   }
 
   .form {
     max-width: 36rem;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
   }
 
   .field {
@@ -98,7 +97,7 @@
   .foot-left {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
   }
 
   .foot {
@@ -106,7 +105,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding-top: 16px;
-    border-top: 1px solid var(--md-sys-color-outline-variant);
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border);
   }
 </style>
+

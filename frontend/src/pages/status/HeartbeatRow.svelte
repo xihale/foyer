@@ -41,9 +41,6 @@
 
   let tip = $state<Tip | null>(null)
 
-  const statusText = $derived(
-    s.status === 'up' ? '运行正常' : s.status === 'down' ? '服务异常' : '未检测',
-  )
   const fmtUptime = $derived(uptime === null ? '--' : `${uptime.toFixed(2)}%`)
 
   const barState = (b: Bar): 'none' | 'down' | 'partial' | 'up' =>
@@ -70,14 +67,12 @@
             `${fmtBarTime(b.t)} – ${fmtBarTime(end)}`,
             `${b.ups}/${b.total} 次成功 (${Math.round((b.ups / b.total) * 100)}%)${typeof b.avg_ms === 'number' ? ` · 延迟 ${Math.round(b.avg_ms)}ms` : ''}`,
           ]
-    // 按估算半宽钳制在视口内,避免贴边溢出(tooltip 居中于 x、悬于 y 上方)
     const pad = 96
     const x = Math.min(Math.max(e.clientX, pad), Math.max(pad, window.innerWidth - pad))
     const y = Math.max(e.clientY, 64)
     tip = { x, y, lines }
   }
 
-  /** 事件委托:柱状图容器监听 pointermove,目标 bar 带 data-i */
   function onBarsMove(e: PointerEvent & { currentTarget: EventTarget & HTMLElement }) {
     const el = (e.target as HTMLElement).closest('[data-i]')
     if (el) showTip(e, s.bars[Number(el.getAttribute('data-i'))]!)
@@ -86,11 +81,15 @@
 
 <div class="row">
   <div class="top">
-    <!-- 左侧:服务名 + 状态 -->
+    <!-- 左侧:服务名 + 状态指示 (正常时不显示多余的 [NORMAL] 标签) -->
     <div class="id">
       <span class="dot" data-state={s.status === 'unknown' ? undefined : s.status}></span>
       <span class="name">{s.name}</span>
-      <span class="state mono" data-state={s.status}>{statusText}</span>
+      {#if s.status === 'down'}
+        <span class="state mono" data-state="down">[OFFLINE]</span>
+      {:else if s.status === 'unknown'}
+        <span class="state mono" data-state="unknown">[PENDING]</span>
+      {/if}
     </div>
 
     <!-- 右侧:当前延迟 + 窗口可用率 -->
@@ -98,7 +97,7 @@
       {#if s.status === 'up' && typeof s.latency_ms === 'number' && s.latency_ms >= 0}
         <span class="lat">{s.latency_ms < 1 ? '<1ms' : `${Math.round(s.latency_ms)}ms`}</span>
       {/if}
-      <span>{fmtUptime}</span>
+      <span class="uptime-val">{fmtUptime}</span>
     </div>
   </div>
 
@@ -119,14 +118,14 @@
   <!-- 最近故障记录 -->
   {#if s.last_incident}
     <div class="incident mono">
-      <span class="mark">异常:</span>
+      <span class="mark">! INCIDENT:</span>
       <span class="msg">{s.last_incident.message}</span>
       <span class="time">{fmtTime(s.last_incident.started_at)}</span>
     </div>
   {/if}
 </div>
 
-<!-- 浮动 Tooltip(fixed 定位,不受父级布局影响) -->
+<!-- 浮动 Tooltip -->
 {#if tip}
   <div
     class="tip mono"
@@ -141,18 +140,17 @@
 
 <style>
   .row {
-    padding: 12px 16px;
-    background: var(--md-sys-color-surface-container-low);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-medium);
-    box-shadow: var(--md-sys-elevation-level1);
+    padding: 12px 14px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-s);
     transition:
       border-color var(--transition),
       background-color var(--transition);
   }
   .row:hover {
-    border-color: var(--md-sys-color-outline);
-    background: var(--md-sys-color-surface-container);
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-hover);
   }
 
   .top {
@@ -169,24 +167,23 @@
     min-width: 0;
   }
   .name {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--color-text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .state {
-    font-size: 11.5px;
-    color: var(--text-4);
-  }
-  .state[data-state='up'] {
-    color: var(--md-sys-color-success);
-    font-weight: 500;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--color-text-quaternary);
   }
   .state[data-state='down'] {
-    color: var(--md-sys-color-error);
-    font-weight: 500;
+    color: var(--color-error);
+  }
+  .state[data-state='unknown'] {
+    color: var(--color-warning);
   }
 
   .metrics {
@@ -195,16 +192,20 @@
     gap: 12px;
     flex-shrink: 0;
     font-size: 12px;
-    color: var(--md-sys-color-on-surface-variant);
+    color: var(--color-text-secondary);
   }
   .lat {
-    color: var(--text-4);
+    color: var(--color-text-tertiary);
+  }
+  .uptime-val {
+    font-weight: 600;
+    color: var(--color-text-primary);
   }
 
   .bars {
     display: grid;
     column-gap: 2px;
-    height: 16px;
+    height: 14px;
     margin-top: 10px;
     width: 100%;
   }
@@ -217,19 +218,19 @@
     transition: opacity var(--transition);
   }
   .bar:hover {
-    opacity: 0.75;
+    opacity: 0.65;
   }
   .bar[data-state='up'] {
-    background: var(--md-sys-color-success);
+    background: var(--color-success);
   }
   .bar[data-state='partial'] {
-    background: var(--md-sys-color-warning);
+    background: var(--color-warning);
   }
   .bar[data-state='down'] {
-    background: var(--md-sys-color-error);
+    background: var(--color-error);
   }
   .bar[data-state='none'] {
-    background: var(--md-sys-color-surface-container-highest);
+    background: var(--color-border-subtle);
   }
 
   .incident {
@@ -238,15 +239,15 @@
     gap: 8px;
     margin-top: 10px;
     padding: 6px 10px;
-    background: var(--md-sys-color-warning-container);
-    border: 1px solid rgba(245, 190, 66, 0.25);
-    border-radius: var(--md-sys-shape-corner-small);
-    font-size: 11.5px;
-    color: var(--md-sys-color-on-warning-container);
+    background: var(--color-warning-bg);
+    border: 1px solid var(--color-warning-border);
+    border-radius: var(--radius-xs);
+    font-size: 11px;
+    color: var(--color-warning-text);
   }
   .mark {
     flex-shrink: 0;
-    font-weight: 600;
+    font-weight: 700;
   }
   .msg {
     white-space: nowrap;
@@ -256,31 +257,32 @@
   .time {
     margin-left: auto;
     flex-shrink: 0;
-    color: var(--text-4);
+    color: var(--color-warning-text);
+    opacity: 0.8;
   }
 
-  /* M3 Tooltip (Rich Plain Tooltip) */
+  /* Swiss Minimalist Tooltip */
   .tip {
     position: fixed;
     z-index: 50;
     transform: translate(-50%, calc(-100% - 8px));
     white-space: nowrap;
-    padding: 6px 11px;
-    background: var(--md-sys-color-inverse-surface);
-    color: var(--md-sys-color-inverse-on-surface);
-    border-radius: var(--md-sys-shape-corner-small);
-    box-shadow: var(--md-sys-elevation-level3);
-    font-size: 11.5px;
-    line-height: 1.5;
+    padding: 6px 10px;
+    background: var(--color-text-primary);
+    color: var(--color-surface);
+    border-radius: var(--radius-xs);
+    font-size: 11px;
+    line-height: 1.4;
     pointer-events: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
   }
   .line {
-    color: var(--md-sys-color-inverse-on-surface);
     opacity: 0.85;
     font-variant-numeric: tabular-nums;
   }
   .line.strong {
     opacity: 1;
-    font-weight: 600;
+    font-weight: 700;
   }
 </style>
+

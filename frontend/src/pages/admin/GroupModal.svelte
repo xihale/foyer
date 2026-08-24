@@ -41,7 +41,7 @@
   {:else}
     <label class="check">
       <input type="checkbox" bind:checked={form.icons_only} />
-      <span>仅显示图标</span>
+      <span class="check-title">仅显示图标</span>
     </label>
   {/if}
 </Modal>
@@ -50,4 +50,10 @@
   .field {
     display: block;
   }
+  .check-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
 </style>
+

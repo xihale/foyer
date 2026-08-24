@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Base Layer: Reset, Material 3 Typography & Global Element Styles
+   Base Layer: Reset, Swiss Typography & Global Element Styles
    ========================================================================== */
 
 /* MPA 跨文档视图过渡: 页面间导航由浏览器执行 crossfade, 消除整页硬切闪白 */
@@ -18,14 +18,22 @@ h2,
 h3,
 h4,
 h5,
-h6,
+h6 {
+  margin: 0;
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
 p {
   margin: 0;
+  text-wrap: pretty;
 }
 
 html {
-  background-color: var(--md-sys-color-surface);
-  color: var(--md-sys-color-on-surface);
+  background-color: var(--color-canvas);
+  color: var(--color-text-primary);
 }
 
 body {
@@ -35,8 +43,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   min-height: 100vh;
-  background-color: var(--md-sys-color-surface);
-  color: var(--md-sys-color-on-surface);
+  background-color: var(--color-canvas);
+  color: var(--color-text-primary);
 }
 
 /* 数字/代码默认等宽数字, 监控数值不跳动 */
@@ -74,21 +82,21 @@ input[type='number'] {
   appearance: textfield;
 }
 
-/* Material 3 文本选择 */
+/* Swiss Style 文本选择: 高对比度选中底色 */
 ::selection {
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+  background: var(--color-text-primary);
+  color: var(--color-surface);
 }
 
-/* Material 3 细致微滚动条 */
+/* Swiss 几何细致发丝滚动条 */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--md-sys-color-surface-container-highest) transparent;
+  scrollbar-color: var(--color-border-strong) transparent;
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -96,18 +104,17 @@ input[type='number'] {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--md-sys-color-surface-container-highest);
-  border-radius: var(--md-sys-shape-corner-full);
-  border: 2px solid var(--md-sys-color-surface);
+  background: var(--color-border-strong);
+  border-radius: var(--radius-xs);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--md-sys-color-outline);
+  background: var(--color-text-tertiary);
 }
 
-/* Material 3 通用焦点轮廓 (Focus Ring) */
+/* Swiss Style 严谨几何焦点框 */
 :focus-visible {
-  outline: 2px solid var(--md-sys-color-primary);
+  outline: 2px solid var(--color-border-focus);
   outline-offset: 2px;
 }
 
@@ -119,3 +126,4 @@ input[type='number'] {
     transition-duration: 0.01ms !important;
   }
 }
+

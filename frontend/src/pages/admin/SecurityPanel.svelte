@@ -38,7 +38,7 @@
         />
       </label>
       <label class="field">
-        <span class="field-label">新密码 (至少 8 位)</span>
+        <span class="field-label">新密码 (至少 8 位) *</span>
         <input
           type="password"
           bind:value={newPassword}
@@ -78,20 +78,20 @@
   .wrap {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 24px;
   }
 
   .block {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
   }
 
   .form {
     max-width: 26rem;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
   }
 
   .field {
@@ -106,8 +106,8 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    border-top: 1px solid var(--md-sys-color-outline-variant);
-    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+    padding-top: 24px;
   }
   @media (min-width: 640px) {
     .session {
@@ -128,13 +128,14 @@
     }
   }
   .title {
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 600;
-    color: var(--md-sys-color-on-surface);
+    color: var(--color-text-primary);
   }
   .sub {
-    margin-top: 4px;
-    font-size: 13px;
-    color: var(--md-sys-color-on-surface-variant);
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
   }
 </style>
+

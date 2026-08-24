@@ -1,7 +1,5 @@
 <script lang="ts">
   // 图标选择器：名称 + 图标 URL + 两个来源——按 URL 抓取 / 上传本地文件。
-  // 名称从条目名称生成（slug，空则取链接域名），URL 从链接生成 favicon.ico；
-  // 各自人为修改过才断开跟随。命名是纯名字（非路径）；成功后写回 /icons/<name>。
   import { untrack } from 'svelte'
   import { iconFit } from './iconFit'
   import { translateError } from './errors'
@@ -18,7 +16,6 @@
   const previewSrc = $derived(bust && currentName ? `${value.split('?')[0]}?v=${bust}` : value)
 
   // 编辑已有图标时名称以现名为准(不再跟随条目名重推),新建时保持自动跟随。
-  // 只取挂载时的初值,故用 untrack 明示"不建立响应依赖"
   const initialName = untrack(() => currentName)
   let name = $state(initialName)
   let nameDirty = $state(initialName !== '')
@@ -35,7 +32,6 @@
     }
   }
 
-  // 域名去后缀：github.com → github；www.youtube.com → youtube
   function nameFromHref(u: string): string {
     const o = originOf(u)
     if (!o) return ''
@@ -45,7 +41,6 @@
     return parts.join('.')
   }
 
-  // 条目名称 → 合法图标名：小写、空白转 -、剔除非白名单字符（中文等被剔除）、收敛连续 -
   function slugify(s: string): string {
     return s
       .trim()
@@ -56,7 +51,6 @@
       .replace(/^-+|-+$/g, '')
   }
 
-  // 条目名称 / 链接变化且用户没改过 → 名称跟随（名称优先，空则域名）；URL 同理
   $effect(() => {
     if (!urlDirty) {
       const o = originOf(href)
@@ -119,7 +113,6 @@
     }
   }
 
-  // 删除当前条目实际占用的磁盘图标文件（清理孤儿）；条目自身的 icon 字段一并清空
   async function remove() {
     if (!currentName) return
     busy = 'fetch'
@@ -138,7 +131,7 @@
 </script>
 
 <div class="field">
-  <span class="field-label">图标</span>
+  <span class="field-label">图标 / ICON</span>
 
   <div class="picker">
     <div class="row">
@@ -192,7 +185,7 @@
     </div>
 
     {#if err}
-      <div class="err">{err}</div>
+      <div class="err mono">{err}</div>
     {/if}
   </div>
 </div>
@@ -205,17 +198,17 @@
   .picker {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 16px;
-    background: var(--md-sys-color-surface-container-lowest);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-medium);
+    gap: 10px;
+    padding: 12px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-s);
   }
 
   .row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
 
   .grow {
@@ -225,25 +218,27 @@
 
   .del {
     flex-shrink: 0;
-    padding-inline: 12px;
-    font-size: 12.5px;
+    padding-inline: 10px;
+    font-size: 11.5px;
   }
 
   .preview {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
     object-fit: contain;
-    border-radius: var(--md-sys-shape-corner-small);
+    border-radius: var(--radius-xs);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
   }
   .preview.fallback {
     display: grid;
     place-items: center;
-    background: var(--md-sys-color-surface-container-highest);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    color: var(--md-sys-color-primary);
-    font-size: 13px;
-    font-weight: 600;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    font-size: 12px;
+    font-weight: 700;
   }
 
   label.btn {
@@ -251,10 +246,9 @@
   }
   label.btn.disabled {
     pointer-events: none;
-    opacity: 0.38;
+    opacity: 0.35;
   }
 
-  /* 视觉隐藏但可聚焦: 键盘 Tab 到文件框, Enter 原生打开选择器 */
   .file-input {
     position: absolute;
     width: 1px;
@@ -264,12 +258,13 @@
     overflow: hidden;
   }
   label.btn:focus-within {
-    outline: 2px solid var(--md-sys-color-primary);
+    outline: 2px solid var(--color-border-focus);
     outline-offset: 2px;
   }
 
   .err {
-    font-size: 12.5px;
-    color: var(--md-sys-color-error);
+    font-size: 11.5px;
+    color: var(--color-error);
   }
 </style>
+

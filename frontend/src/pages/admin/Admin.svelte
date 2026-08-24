@@ -613,67 +613,67 @@
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
-    color: var(--md-sys-color-on-surface-variant);
-    background: var(--md-sys-color-surface);
+    color: var(--color-text-secondary);
+    background: var(--color-canvas);
   }
 
   .main {
     max-width: 48rem;
     margin: 0 auto;
-    padding: 48px 20px;
+    padding: 48px 16px;
     width: 100%;
   }
 
   .boot {
     padding: 96px 0;
-    font-size: 14px;
-    color: var(--md-sys-color-outline);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-text-quaternary);
   }
 
-  /* 登录界面 (M3 Auth Dialog / Card) */
+  /* 登录界面 (Swiss Modernist Auth Card) */
   .login-wrap {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 64px 20px;
+    padding: 48px 16px;
   }
   .login {
     width: 100%;
-    max-width: 25rem;
+    max-width: 24rem;
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    padding: 32px 28px;
-    background: var(--md-sys-color-surface-container-high);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-extra-large);
-    box-shadow: var(--md-sys-elevation-level3);
+    gap: 20px;
+    padding: 28px 24px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-m);
   }
   .field {
     display: block;
   }
   .wide {
     width: 100%;
-    min-height: 42px;
+    min-height: 38px;
   }
 
-  /* 管理主界面 (M3 Workspace) */
+  /* 管理主界面 (Swiss Architectural Workspace) */
   .workspace {
     display: flex;
     flex-direction: column;
     flex: 1;
     width: 100%;
-    max-width: 68rem;
+    max-width: 72rem;
     margin: 0 auto;
-    padding: 28px 20px;
-    gap: 28px;
+    padding: 20px 16px 48px;
+    gap: 24px;
   }
   @media (min-width: 768px) {
     .workspace {
       flex-direction: row;
-      padding: 32px 24px;
-      gap: 36px;
+      padding: 28px 24px 64px;
+      gap: 32px;
     }
   }
 
@@ -682,13 +682,12 @@
   }
   @media (min-width: 768px) {
     .side {
-      width: 13.5rem;
+      width: 13rem;
     }
   }
 
   .content {
     min-width: 0;
     flex: 1;
-    padding-bottom: 64px;
   }
 </style>

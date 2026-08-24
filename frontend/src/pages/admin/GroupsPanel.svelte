@@ -45,7 +45,7 @@
         <RowActions onedit={() => onedit(g)} ondelete={() => ondelete(g)} />
       </div>
     {:else}
-      <p class="none">{empty}</p>
+      <p class="none mono">{empty}</p>
     {/each}
   </div>
 {/snippet}
@@ -83,35 +83,34 @@
   .block {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
   }
   .wrap {
-    gap: 32px;
+    gap: 28px;
   }
 
   .head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 4px;
+    padding: 0 2px;
   }
   .count {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 2px 8px;
-    background: var(--md-sys-color-surface-container-high);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-full);
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface-variant);
+    padding: 1px 6px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
   }
 
   .list-row {
     gap: 16px;
   }
-  /* 分组行没有图标,名称与徽标直接横向排在 info 里 */
   .list-info {
     display: flex;
     align-items: center;
@@ -119,18 +118,18 @@
   }
 
   .none {
-    padding: 32px 16px;
+    padding: 28px 16px;
     text-align: center;
-    font-size: 13px;
-    color: var(--md-sys-color-outline);
+    font-size: 12px;
+    color: var(--color-text-quaternary);
   }
 
   .add {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
+    gap: 10px;
+    padding: 12px 16px;
   }
   .grow {
     flex: 1;
@@ -141,3 +140,4 @@
     flex-shrink: 0;
   }
 </style>
+

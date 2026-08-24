@@ -102,7 +102,7 @@
 </script>
 
 {#snippet winSwitch()}
-  <!-- 24h / 7d 切换: Material 3 Segmented Button -->
+  <!-- 24h / 7d 切换: Swiss Segmented Switch -->
   <div class="win-switch" role="radiogroup" aria-label="时间窗口">
     {#each ['24h', '7d'] as w (w)}
       <button
@@ -113,11 +113,6 @@
         aria-checked={win === w}
         onclick={() => pickWin(w as '24h' | '7d')}
       >
-        {#if win === w}
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="opt-check">
-            <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-          </svg>
-        {/if}
         {w}
       </button>
     {/each}
@@ -148,7 +143,7 @@
 
         <section class="stack" aria-label="服务心跳列表">
           <div class="section-head">
-            <span class="group-title">节点状态</span>
+            <span class="group-title">节点状态 / MONITORED NODES</span>
             <span class="updated mono" class:fail={refreshFailed} title="每 10 秒自动刷新">
               {refreshFailed ? '刷新失败 · 显示上次数据' : updatedAt ? `更新于 ${updatedAt}` : ''}
             </span>
@@ -165,7 +160,7 @@
           {/if}
         </section>
 
-        <!-- 状态图例 (M3 Style Legend) -->
+        <!-- 状态图例 -->
         <div class="legend mono">
           <span><i class="dot" data-state="up"></i>正常</span>
           <span><i class="dot warn"></i>波动</span>
@@ -182,8 +177,8 @@
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
-    color: var(--md-sys-color-on-surface-variant);
-    background: var(--md-sys-color-surface);
+    color: var(--color-text-secondary);
+    background: var(--color-canvas);
   }
 
   .switch-desktop {
@@ -195,12 +190,12 @@
     }
   }
 
-  /* M3 Segmented Button */
+  /* Swiss Minimalist Segmented Button */
   .win-switch {
     display: inline-flex;
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-full);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-s);
     padding: 2px;
     gap: 2px;
   }
@@ -208,37 +203,38 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
     border: none;
     background: transparent;
-    padding: 3px 12px;
-    min-height: 26px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface-variant);
-    border-radius: var(--md-sys-shape-corner-full);
+    padding: 2px 10px;
+    min-height: 24px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-xs);
     outline: none;
+    cursor: pointer;
     transition: background-color var(--transition), color var(--transition);
   }
-  .opt:hover {
-    color: var(--md-sys-color-on-surface);
-    background: color-mix(in srgb, var(--md-sys-color-on-surface) 5%, transparent);
+  .opt:hover:not(.is-active) {
+    color: var(--color-text-primary);
+    background: var(--color-surface-hover);
   }
   .opt.is-active {
-    background: var(--md-sys-color-secondary-container);
-    color: var(--md-sys-color-on-secondary-container);
-    font-weight: 600;
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-weight: 700;
   }
-  .opt-check {
-    color: var(--md-sys-color-on-secondary-container);
+  .opt.is-active:hover {
+    background: var(--color-accent-hover);
+    color: var(--color-on-accent);
   }
 
   .main {
     flex: 1;
     width: 100%;
-    max-width: 68rem;
+    max-width: 72rem;
     margin: 0 auto;
-    padding: 24px 18px 48px;
+    padding: 20px 16px 48px;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -252,14 +248,15 @@
 
   .loading {
     padding: 72px 0;
-    font-size: 13.5px;
-    color: var(--text-4);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-text-quaternary);
   }
 
   .stack {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
   .content-stack {
     gap: 24px;
@@ -273,27 +270,28 @@
     padding: 0 2px;
   }
   .updated {
-    font-size: 11.5px;
-    color: var(--text-4);
+    font-size: 11px;
+    color: var(--color-text-quaternary);
   }
   .updated.fail {
-    color: var(--md-sys-color-error);
+    color: var(--color-error);
   }
 
   .rows {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
 
   .legend {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 16px;
     padding: 12px 0;
-    font-size: 11.5px;
-    color: var(--text-3);
+    font-size: 11px;
+    color: var(--color-text-tertiary);
   }
   .legend span {
     display: inline-flex;
@@ -301,9 +299,10 @@
     gap: 6px;
   }
   .legend .dot.warn {
-    background: var(--md-sys-color-warning);
+    background: var(--color-warning);
   }
   .legend .dot.none {
-    background: var(--md-sys-color-surface-container-highest);
+    background: var(--color-border-strong);
   }
 </style>
+

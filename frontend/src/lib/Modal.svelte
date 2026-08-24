@@ -32,14 +32,14 @@
     children,
   }: Props = $props()
 
-  // 弹窗过渡:0.96 缩放 + 淡入,ease-out(移动端为底部抽屉)
+  // 弹窗过渡:0.98 缩放 + 淡入
   const dialogTransition = (
     _node: Element,
     _params?: Record<string, unknown>,
   ): TransitionConfig => ({
-    duration: 180,
+    duration: 140,
     easing: cubicOut,
-    css: (t: number) => `opacity: ${t}; transform: scale(${0.96 + 0.04 * t})`,
+    css: (t: number) => `opacity: ${t}; transform: scale(${0.98 + 0.02 * t})`,
   })
 
   let dialogEl = $state<HTMLDivElement | null>(null)
@@ -84,7 +84,7 @@
   <button
     type="button"
     class="backdrop"
-    transition:fade={{ duration: 150 }}
+    transition:fade={{ duration: 120 }}
     onclick={onclose}
     aria-label="关闭弹窗"
     tabindex="-1"
@@ -101,7 +101,7 @@
       <div class="head">
         <h3 class="title">{title}</h3>
         <button type="button" class="btn-close" onclick={onclose} aria-label="关闭">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
           </svg>
         </button>
@@ -144,9 +144,9 @@
   .backdrop {
     position: absolute;
     inset: 0;
-    background: var(--md-sys-color-scrim);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: var(--color-scrim);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: none;
   }
 
@@ -155,16 +155,15 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-height: 88dvh;
-    background: var(--md-sys-color-surface-container-high);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-extra-large) var(--md-sys-shape-corner-extra-large) 0 0;
-    box-shadow: var(--md-sys-elevation-level3);
+    max-height: 90dvh;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-m) var(--radius-m) 0 0;
     overflow: hidden;
   }
   @media (min-width: 640px) {
     .dialog {
-      border-radius: var(--md-sys-shape-corner-extra-large);
+      border-radius: var(--radius-m);
     }
   }
   .dialog.w-sm { max-width: 22rem; }
@@ -183,21 +182,22 @@
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--color-border);
   }
   .title {
     margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--md-sys-color-on-surface);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--color-text-primary);
   }
 
   .body {
     min-height: 0;
     flex: 1;
     overflow-y: auto;
-    padding: 20px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -205,19 +205,21 @@
 
   .error-bar {
     flex-shrink: 0;
-    padding: 10px 20px;
-    border-top: 1px solid rgba(242, 184, 181, 0.3);
-    background: var(--md-sys-color-error-container);
-    font-size: 12.5px;
-    color: var(--md-sys-color-on-error-container);
+    padding: 8px 18px;
+    border-top: 1px solid var(--color-error-border);
+    background: var(--color-error-bg);
+    font-size: 12px;
+    color: var(--color-error-text);
   }
 
   .foot {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 8px;
     flex-shrink: 0;
-    padding: 14px 20px;
-    border-top: 1px solid var(--md-sys-color-outline-variant);
+    padding: 12px 18px;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface-subtle);
   }
 </style>
+

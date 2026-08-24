@@ -63,7 +63,7 @@
   .wrap {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
   }
 
   .head {
@@ -78,12 +78,13 @@
 
   .watch {
     flex-shrink: 0;
-    border: 1px solid color-mix(in srgb, var(--md-sys-color-success) 35%, transparent);
-    background: var(--md-sys-color-success-container);
-    padding: 2px 8px;
-    border-radius: var(--md-sys-shape-corner-small);
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--md-sys-color-on-success-container);
+    border: 1px solid var(--color-success-border);
+    background: var(--color-success-bg);
+    padding: 1px 6px;
+    border-radius: var(--radius-xs);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--color-success-text);
   }
 </style>
+

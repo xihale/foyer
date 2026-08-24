@@ -242,14 +242,14 @@
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
-    color: var(--md-sys-color-on-surface-variant);
-    background: var(--md-sys-color-surface);
+    color: var(--color-text-secondary);
+    background: var(--color-canvas);
   }
 
   .search-desktop {
     display: none;
     flex: 1;
-    max-width: 20rem;
+    max-width: 18rem;
   }
   @media (min-width: 640px) {
     .search-desktop {
@@ -260,9 +260,9 @@
   .main {
     flex: 1;
     width: 100%;
-    max-width: 68rem;
+    max-width: 72rem;
     margin: 0 auto;
-    padding: 24px 18px 48px;
+    padding: 20px 16px 48px;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -276,7 +276,8 @@
 
   .loading {
     padding: 72px 0;
-    font-size: 13.5px;
-    color: var(--text-4);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-text-quaternary);
   }
 </style>

@@ -58,7 +58,7 @@
   .wrap {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
   }
 
   .head {
@@ -71,25 +71,25 @@
     flex-shrink: 0;
   }
 
-  /* 书签图标 */
   .list-icon {
-    width: 26px;
-    height: 26px;
-    font-size: 12px;
-    border-radius: var(--md-sys-shape-corner-extra-small);
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+    border-radius: var(--radius-xs);
   }
 
   .href {
     display: block;
-    margin-top: 3px;
-    font-size: 12px;
-    color: var(--md-sys-color-outline);
+    margin-top: 2px;
+    font-size: 11.5px;
+    color: var(--color-text-tertiary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: color var(--transition);
   }
   .href:hover {
-    color: var(--md-sys-color-primary);
+    color: var(--color-accent);
   }
 </style>
+

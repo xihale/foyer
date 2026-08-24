@@ -72,7 +72,7 @@
   <div class="monitor">
     <label class="check">
       <input type="checkbox" bind:checked={form.monitor_enabled} />
-      <span>开启定时探活与状态监控</span>
+      <span class="monitor-title">开启定时探活与状态监控</span>
     </label>
 
     {#if form.monitor_enabled}
@@ -96,7 +96,7 @@
   .grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 14px;
   }
   @media (min-width: 640px) {
     .grid {
@@ -114,19 +114,24 @@
   .monitor {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 18px;
-    background: var(--md-sys-color-surface-container-lowest);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-medium);
+    gap: 14px;
+    padding: 14px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-s);
+  }
+  .monitor-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-primary);
   }
 
   .params {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
-    padding-top: 16px;
-    border-top: 1px solid var(--md-sys-color-outline-variant);
+    gap: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border);
   }
   @media (min-width: 640px) {
     .params {
@@ -134,3 +139,4 @@
     }
   }
 </style>
+
