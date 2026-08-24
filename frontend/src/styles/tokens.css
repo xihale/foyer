@@ -1,11 +1,13 @@
 /* ==========================================================================
-   foyer Design Tokens — "Warm Paper" Theme
-   暖纸白底 · 杏桃点缀 · 轻盈投影 · 朴实耐看,大方可爱
+   foyer Design Tokens — "Warm Paper / Warm Charcoal"
+   跟随系统 prefers-color-scheme 自动切换明暗双主题:
+   浅色=暖纸白,深色=暖炭黑;统一杏桃点缀,朴实耐看。
    ========================================================================== */
 
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
 
+  /* ================= Light (default): 暖纸白 ================= */
   /* ---- Core Color Roles ---- */
   --md-sys-color-primary: #c96a45;
   --md-sys-color-on-primary: #ffffff;
@@ -62,6 +64,59 @@
   --md-sys-color-inverse-primary: #ffb59a;
   --md-sys-color-scrim: rgba(40, 38, 30, 0.4);
 
+  /* ---- Elevation (浅色底用柔和投影替代描边堆叠) ---- */
+  --md-sys-elevation-level0: none;
+  --md-sys-elevation-level1: 0 1px 2px rgba(74, 66, 50, 0.06);
+  --md-sys-elevation-level2:
+    0 1px 2px rgba(74, 66, 50, 0.07),
+    0 4px 12px rgba(74, 66, 50, 0.07);
+  --md-sys-elevation-level3: 0 10px 32px rgba(74, 66, 50, 0.18);
+  --md-sys-elevation-level4: 0 18px 48px rgba(74, 66, 50, 0.24);
+
+  /* ---- Alias literals that differ per scheme ---- */
+  --text-3: #90958a;
+  --text-4: #b3b7ab;
+  --line-light: rgba(51, 54, 47, 0.05);
+  --ok-glow: rgba(78, 145, 102, 0.25);
+  --warn-glow: rgba(187, 138, 48, 0.25);
+  --err-dim: rgba(189, 80, 72, 0.1);
+  --accent-dim: rgba(201, 106, 69, 0.11);
+
+  /* ========================================================================
+     Compatibility / Semantic Aliases
+     ======================================================================== */
+  --bg: var(--md-sys-color-surface);
+  --bg-1: var(--md-sys-color-surface-container-low);
+  --bg-2: var(--md-sys-color-surface-container);
+  --bg-3: var(--md-sys-color-surface-container-high);
+  --bg-squircle: var(--md-sys-color-surface-container-highest);
+
+  --line: var(--md-sys-color-outline-variant);
+  --line-2: var(--md-sys-color-outline);
+
+  --text-1: var(--md-sys-color-on-surface);
+  --text-2: var(--md-sys-color-on-surface-variant);
+
+  --ok: var(--md-sys-color-success);
+  --ok-2: var(--md-sys-color-on-success-container);
+  --warn: var(--md-sys-color-warning);
+  --warn-2: var(--md-sys-color-on-warning-container);
+  --err: var(--md-sys-color-error);
+  --err-2: var(--md-sys-color-on-error-container);
+  --accent: var(--md-sys-color-primary);
+  --accent-2: var(--md-sys-color-on-primary-container);
+
+  --radius-xs: var(--md-sys-shape-corner-extra-small);
+  --radius-s: var(--md-sys-shape-corner-small);
+  --radius-m: var(--md-sys-shape-corner-medium);
+  --radius-l: var(--md-sys-shape-corner-large);
+  --radius-xl: var(--md-sys-shape-corner-extra-large);
+  --radius-full: var(--md-sys-shape-corner-full);
+
+  --shadow-sm: var(--md-sys-elevation-level1);
+  --shadow-card: var(--md-sys-elevation-level2);
+  --shadow-pop: var(--md-sys-elevation-level3);
+
   /* ---- State Layers ---- */
   --md-sys-state-hover-opacity: 0.05;
   --md-sys-state-focus-opacity: 0.1;
@@ -83,15 +138,6 @@
   --md-sys-motion-duration-short4: 200ms;
   --md-sys-motion-duration-medium1: 250ms;
 
-  /* ---- Elevation (浅色底用柔和投影替代描边堆叠) ---- */
-  --md-sys-elevation-level0: none;
-  --md-sys-elevation-level1: 0 1px 2px rgba(74, 66, 50, 0.06);
-  --md-sys-elevation-level2:
-    0 1px 2px rgba(74, 66, 50, 0.07),
-    0 4px 12px rgba(74, 66, 50, 0.07);
-  --md-sys-elevation-level3: 0 10px 32px rgba(74, 66, 50, 0.18);
-  --md-sys-elevation-level4: 0 18px 48px rgba(74, 66, 50, 0.24);
-
   /* ---- Typography ---- */
   --font-sans:
     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
@@ -100,51 +146,80 @@
     ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
     monospace;
 
-  /* ========================================================================
-     Compatibility / Semantic Aliases
-     ======================================================================== */
-  --bg: var(--md-sys-color-surface);
-  --bg-1: var(--md-sys-color-surface-container-low);
-  --bg-2: var(--md-sys-color-surface-container);
-  --bg-3: var(--md-sys-color-surface-container-high);
-  --bg-squircle: var(--md-sys-color-surface-container-highest);
-
-  --line: var(--md-sys-color-outline-variant);
-  --line-2: var(--md-sys-color-outline);
-  --line-light: rgba(51, 54, 47, 0.05);
-
-  --text-1: var(--md-sys-color-on-surface);
-  --text-2: var(--md-sys-color-on-surface-variant);
-  --text-3: #90958a;
-  --text-4: #b3b7ab;
-
-  --ok: var(--md-sys-color-success);
-  --ok-2: var(--md-sys-color-on-success-container);
-  --ok-glow: rgba(78, 145, 102, 0.25);
-
-  --warn: var(--md-sys-color-warning);
-  --warn-2: var(--md-sys-color-on-warning-container);
-  --warn-glow: rgba(187, 138, 48, 0.25);
-
-  --err: var(--md-sys-color-error);
-  --err-2: var(--md-sys-color-on-error-container);
-  --err-dim: rgba(189, 80, 72, 0.1);
-
-  --accent: var(--md-sys-color-primary);
-  --accent-2: var(--md-sys-color-on-primary-container);
-  --accent-dim: rgba(201, 106, 69, 0.11);
-
-  --radius-xs: var(--md-sys-shape-corner-extra-small);
-  --radius-s: var(--md-sys-shape-corner-small);
-  --radius-m: var(--md-sys-shape-corner-medium);
-  --radius-l: var(--md-sys-shape-corner-large);
-  --radius-xl: var(--md-sys-shape-corner-extra-large);
-  --radius-full: var(--md-sys-shape-corner-full);
-
   --transition: 160ms cubic-bezier(0.2, 0, 0, 1);
   --transition-spring: 200ms cubic-bezier(0.2, 0, 0, 1);
+}
 
-  --shadow-sm: var(--md-sys-elevation-level1);
-  --shadow-card: var(--md-sys-elevation-level2);
-  --shadow-pop: var(--md-sys-elevation-level3);
+/* ================= Dark: 暖炭黑(跟随系统偏好) ================= */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --md-sys-color-primary: #e08a63;
+    --md-sys-color-on-primary: #381608;
+    --md-sys-color-primary-container: #5c2f1b;
+    --md-sys-color-on-primary-container: #ffd9c2;
+
+    --md-sys-color-secondary: #b6b2a4;
+    --md-sys-color-on-secondary: #33352d;
+    --md-sys-color-secondary-container: #45473d;
+    --md-sys-color-on-secondary-container: #e4e1d4;
+
+    --md-sys-color-tertiary: #c9b57e;
+    --md-sys-color-on-tertiary: #3a2f10;
+    --md-sys-color-tertiary-container: #554722;
+    --md-sys-color-on-tertiary-container: #ecdfba;
+
+    --md-sys-color-error: #e39a90;
+    --md-sys-color-on-error: #4b1510;
+    --md-sys-color-error-container: #6b2b23;
+    --md-sys-color-on-error-container: #fbdad3;
+
+    --md-sys-color-success: #82bf95;
+    --md-sys-color-on-success: #0d331c;
+    --md-sys-color-success-container: #294d33;
+    --md-sys-color-on-success-container: #c4eccb;
+
+    --md-sys-color-warning: #d9b25e;
+    --md-sys-color-on-warning: #3d2d07;
+    --md-sys-color-warning-container: #59451a;
+    --md-sys-color-on-warning-container: #f5e3ae;
+
+    --md-sys-color-background: #1a1815;
+    --md-sys-color-on-background: #e8e4da;
+    --md-sys-color-surface: #1a1815;
+    --md-sys-color-on-surface: #e8e4da;
+    --md-sys-color-surface-dim: #141210;
+    --md-sys-color-surface-bright: #403c34;
+
+    --md-sys-color-surface-container-lowest: #131110;
+    --md-sys-color-surface-container-low: #201d19;
+    --md-sys-color-surface-container: #262320;
+    --md-sys-color-surface-container-high: #2d2a25;
+    --md-sys-color-surface-container-highest: #36322b;
+
+    --md-sys-color-surface-variant: #403c34;
+    --md-sys-color-on-surface-variant: #b4afa2;
+    --md-sys-color-outline: rgba(232, 228, 218, 0.2);
+    --md-sys-color-outline-variant: rgba(232, 228, 218, 0.09);
+
+    --md-sys-color-inverse-surface: #e8e4da;
+    --md-sys-color-inverse-on-surface: #33362f;
+    --md-sys-color-inverse-primary: #c96a45;
+    --md-sys-color-scrim: rgba(8, 7, 5, 0.65);
+
+    /* 深色底投影弱化为轮廓感 */
+    --md-sys-elevation-level1: none;
+    --md-sys-elevation-level2: none;
+    --md-sys-elevation-level3: 0 10px 32px rgba(0, 0, 0, 0.5);
+    --md-sys-elevation-level4: 0 18px 48px rgba(0, 0, 0, 0.6);
+
+    --text-3: #8b887e;
+    --text-4: #615e55;
+    --line-light: rgba(232, 228, 218, 0.05);
+    --ok-glow: rgba(130, 191, 149, 0.22);
+    --warn-glow: rgba(217, 178, 94, 0.22);
+    --err-dim: rgba(227, 154, 144, 0.12);
+    --accent-dim: rgba(224, 138, 99, 0.13);
+  }
 }

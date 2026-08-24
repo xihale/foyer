@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f7f4ee" />
+    <!-- 跟随系统 prefers-color-scheme:明暗两套 theme-color -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f4ee" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1815" />
     <meta name="description" content="foyer · 管理后台" />
     <meta name="robots" content="noindex" />
     <!-- 预取另外两个入口,导航瞬间命中缓存(Chrome 121+,其余浏览器忽略) -->
@@ -17,6 +19,13 @@
         background-color: #f7f4ee;
         color: #33362f;
         margin: 0;
+      }
+      /* 防闪白/闪黑:与 tokens.css 的双主题保持一致 */
+      @media (prefers-color-scheme: dark) {
+        html, body {
+          background-color: #1a1815;
+          color: #e8e4da;
+        }
       }
     </style>
   </head>
