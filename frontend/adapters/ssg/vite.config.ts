@@ -16,6 +16,8 @@ export default extendConfig(baseConfig, () => {
       ssgAdapter({
         origin: 'https://home.xeed.ink',
         log: 'quiet',
+        // 自动 sitemap 不辨公私,连 /admin、/404 都会收进去;改由 public/sitemap.xml 手工维护
+        sitemapOutFile: null,
       }),
     ],
   }

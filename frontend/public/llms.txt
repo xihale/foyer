@@ -1,0 +1,13 @@
+# foyer
+
+> 自托管的主页面板与在线状态监控：服务卡片、快速书签、实时可用性探测与公开状态页。
+
+## Pages
+
+- [首页](https://home.xeed.ink/): 服务面板——受监控服务的实时状态、遥测摘要与快速书签分组。
+- [状态页](https://home.xeed.ink/status): 公开的在线率报告，支持 24 小时 / 7 天两种窗口。
+
+## Notes
+
+- `/admin` 为管理后台，需要管理员密码登录，不对公众开放。
+- 公开 API：`GET /api/health`、`GET /api/status?window=24h|7d` 返回 JSON。

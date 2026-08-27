@@ -76,6 +76,8 @@ func wwwCtype(name string) string {
 		return "font/woff2"
 	case ".xml":
 		return "application/xml"
+	case ".txt":
+		return "text/plain; charset=utf-8"
 	}
 	return "application/octet-stream"
 }
@@ -93,7 +95,8 @@ func (a *app) health(w http.ResponseWriter, _ *http.Request) {
 }
 
 // serveEntry 嵌入文件：assets/* 与 build/*（Qwik 哈希产物）内容可永久缓存，其余协商缓存。
-func serveEntry(w http.ResponseWriter, r *http.Request, e wwwEntry, rel string) {
+// code 通常为 200；404 页复用同一管线但跳过 304 协商（错误响应没有新鲜的语义）。
+func serveEntry(w http.ResponseWriter, r *http.Request, e wwwEntry, rel string, code int) {
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	if strings.HasPrefix(rel, "assets/") || strings.HasPrefix(rel, "build/") {
 		w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
@@ -102,17 +105,19 @@ func serveEntry(w http.ResponseWriter, r *http.Request, e wwwEntry, rel string) 
 	}
 	w.Header().Set("Etag", e.etag)
 	// If-None-Match 可能为列表或 *，子串匹配足够
-	if inm := r.Header.Get("If-None-Match"); inm == "*" || strings.Contains(inm, e.etag) {
+	if inm := r.Header.Get("If-None-Match"); code == http.StatusOK &&
+		(inm == "*" || strings.Contains(inm, e.etag)) {
 		w.WriteHeader(http.StatusNotModified)
 		return
 	}
 	w.Header().Set("Content-Type", e.ctype)
+	w.WriteHeader(code)
 	w.Write(e.data)
 }
 
 // notFound 兜底 handler——静态文件阶梯，顺序与 Zig 版 App.notFound 一致：
 // 405 → api 404 JSON → icons 磁盘 → api_only → 精确命中 → 无扩展名试 .html
-// → SPA 兜底 index.html → 404。
+// → 未命中回预渲染 404 页(带 404 状态码)。
 func (a *app) notFound(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet && r.Method != http.MethodHead {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
@@ -136,22 +141,23 @@ func (a *app) notFound(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if e, ok := wwwTable[rel]; ok {
-		serveEntry(w, r, e, rel)
+		serveEntry(w, r, e, rel, http.StatusOK)
 		return
 	}
 	// 干净链接回退：/status → status.html 或 status/index.html（Qwik SSG 产物布局）
 	if !strings.Contains(rel, ".") {
 		if e, ok := wwwTable[rel+".html"]; ok {
-			serveEntry(w, r, e, rel+".html")
+			serveEntry(w, r, e, rel+".html", http.StatusOK)
 			return
 		}
 		if e, ok := wwwTable[rel+"/index.html"]; ok {
-			serveEntry(w, r, e, rel+"/index.html")
+			serveEntry(w, r, e, rel+"/index.html", http.StatusOK)
 			return
 		}
 	}
-	if e, ok := wwwTable["index.html"]; ok {
-		serveEntry(w, r, e, "index.html")
+	// 未命中即真 404：回预渲染的错误页，而不是假装是首页（旧 SPA 兜底已弃）
+	if e, ok := wwwTable["404/index.html"]; ok {
+		serveEntry(w, r, e, "404/index.html", http.StatusNotFound)
 		return
 	}
 	http.Error(w, "not found", http.StatusNotFound)
