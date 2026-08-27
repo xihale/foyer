@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --mode ssr",
     "build.client": "vite build",
-    "build.ssg": "vite build -c adapters/ssg/vite.config.ts",
+    "build.ssg": "vite build -c adapters/ssg/vite.config.ts && bun scripts/inline-css.mjs",
     "check": "tsc --noEmit",
     "preview": "vite build && vite preview",
     "build": "bun run build.client && bun run build.ssg"
