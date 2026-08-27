@@ -1,0 +1,39 @@
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(24rem, calc(100vw - 40px));
+  padding: 8px 14px;
+  background: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-surface);
+}
+.toast[data-kind='ok'] {
+  border-left: 3px solid var(--color-success);
+}
+.toast[data-kind='err'] {
+  border-left: 3px solid var(--color-error);
+}
+
+/* 入场:flying up + fade(Svelte fly 的 CSS 版) */
+.toast {
+  animation: toast-in 120ms ease-out;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.text {
+  line-height: 1.4;
+}

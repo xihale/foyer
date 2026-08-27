@@ -74,6 +74,8 @@ func wwwCtype(name string) string {
 		return "image/webp"
 	case ".woff2":
 		return "font/woff2"
+	case ".xml":
+		return "application/xml"
 	}
 	return "application/octet-stream"
 }
@@ -90,10 +92,10 @@ func (a *app) health(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]any{"ok": true})
 }
 
-// serveEntry 嵌入文件：assets/* 内容哈希命名可永久缓存，其余协商缓存。
+// serveEntry 嵌入文件：assets/* 与 build/*（Qwik 哈希产物）内容可永久缓存，其余协商缓存。
 func serveEntry(w http.ResponseWriter, r *http.Request, e wwwEntry, rel string) {
 	w.Header().Set("X-Content-Type-Options", "nosniff")
-	if strings.HasPrefix(rel, "assets/") {
+	if strings.HasPrefix(rel, "assets/") || strings.HasPrefix(rel, "build/") {
 		w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
 	} else {
 		w.Header().Set("Cache-Control", "no-cache")
@@ -137,10 +139,14 @@ func (a *app) notFound(w http.ResponseWriter, r *http.Request) {
 		serveEntry(w, r, e, rel)
 		return
 	}
-	// MPA 干净链接回退：/status → status.html
+	// 干净链接回退：/status → status.html 或 status/index.html（Qwik SSG 产物布局）
 	if !strings.Contains(rel, ".") {
 		if e, ok := wwwTable[rel+".html"]; ok {
 			serveEntry(w, r, e, rel+".html")
+			return
+		}
+		if e, ok := wwwTable[rel+"/index.html"]; ok {
+			serveEntry(w, r, e, rel+"/index.html")
 			return
 		}
 	}

@@ -3,6 +3,15 @@
    Precision Grid, Typographic Hierarchy, Hairline Borders & High Legibility
    ========================================================================== */
 
+/* ===== 弹性布局原子(表单行内 grow/shrink 共用) ===== */
+.grow {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.shrink {
+  flex-shrink: 0;
+}
+
 /* ===== 状态指示点 (Swiss Status Indicator) ===== */
 
 .dot {
@@ -21,8 +30,12 @@
 .dot[data-state='down'] {
   background: var(--color-error);
 }
-.dot.warn {
+/* 图例用变体(不参与状态脉冲) */
+.dot.dot-warn {
   background: var(--color-warning);
+}
+.dot.dot-none {
+  background: var(--color-border-strong);
 }
 
 .dot.pulse {

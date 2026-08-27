@@ -1,21 +1,21 @@
 {
-  "name": "frontend",
+  "name": "foyer-web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
+    "dev": "vite --mode ssr",
+    "build.client": "vite build",
+    "build.ssg": "vite build -c adapters/ssg/vite.config.ts",
+    "check": "tsc --noEmit",
+    "preview": "vite build && vite preview",
+    "build": "bun run build.client && bun run build.ssg"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^7.2.0",
-    "@tsconfig/svelte": "^5.0.8",
+    "@qwik.dev/core": "^2.0.0-beta.42",
+    "@qwik.dev/router": "^2.0.0-beta.42",
     "@types/node": "^24.13.3",
-    "svelte": "^5.56.8",
-    "svelte-check": "^4.7.3",
-    "typescript": "~6.0.2",
+    "typescript": "~5.9.3",
     "vite": "^8.2.0"
   }
 }

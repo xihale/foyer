@@ -1,0 +1,42 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  color: var(--color-text-secondary);
+  background: var(--color-canvas);
+}
+
+/* 桌面端顶栏搜索;移动端隐藏(改走页头下方) */
+.searchDesktop {
+  display: none;
+  flex: 1;
+  max-width: 18rem;
+}
+@media (min-width: 640px) {
+  .searchDesktop {
+    display: block;
+  }
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+@media (min-width: 640px) {
+  .main {
+    padding: 28px 24px 64px;
+    gap: 28px;
+  }
+}
+
+.loading {
+  padding: 72px 0;
+  font-size: 13px;
+  color: var(--color-text-quaternary);
+}

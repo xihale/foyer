@@ -1,0 +1,94 @@
+.nav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+@media (min-width: 768px) {
+  .nav {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+/* Swiss Minimalist Sidebar Nav Item */
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-align: left;
+  text-decoration: none;
+  outline: none;
+  transition:
+    background-color var(--transition),
+    color var(--transition),
+    border-color var(--transition);
+  user-select: none;
+}
+.item:hover:not(.isActive) {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+.isActive {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 600;
+  border-color: var(--color-accent);
+}
+.isActive:hover {
+  background: var(--color-accent-hover);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent-hover);
+}
+
+.idx {
+  font-size: 10px;
+  opacity: 0.6;
+}
+.isActive .idx,
+.isActive:hover .idx {
+  color: var(--color-on-accent);
+  opacity: 0.85;
+  font-weight: 700;
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--color-text-tertiary);
+  transition: color var(--transition);
+}
+.item:hover:not(.isActive) .icon {
+  color: var(--color-text-primary);
+}
+.isActive .icon,
+.isActive:hover .icon {
+  color: var(--color-on-accent);
+}
+.iconActive {
+  color: inherit;
+}
+
+.count {
+  margin-left: auto;
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-xs);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+}
+.isActive .count {
+  background: color-mix(in srgb, var(--color-on-accent) 18%, transparent);
+  border-color: transparent;
+  color: var(--color-on-accent);
+}

@@ -1,0 +1,118 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+.titleWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.groupTitle {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.count {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-quaternary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+.serviceCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-s);
+  text-decoration: none;
+}
+
+.iconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+}
+.icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+.fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  user-select: none;
+}
+
+.info {
+  min-width: 0;
+  flex: 1;
+}
+.name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--transition);
+}
+.serviceCard:hover .name {
+  color: var(--color-accent);
+}
+.desc {
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statusIndicator {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.lat {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--color-text-quaternary);
+}

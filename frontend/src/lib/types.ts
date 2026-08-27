@@ -1,4 +1,4 @@
-// /api/config 的共享类型：面板页与管理台消费同一份数据
+// /api/config 与相关接口的共享类型:面板页与管理台消费同一份数据
 
 export interface Service {
   id: number
@@ -7,11 +7,11 @@ export interface Service {
   href: string
   description: string | null
   monitor_enabled: boolean
-  // 管理台编辑所需，/api/config 一并返回
+  // 管理台编辑所需,/api/config 一并返回
   group_id: number
   monitor_interval_s: number
   monitor_retry_max: number
-  // 监控引擎内存态（unknown|up|down）
+  // 监控引擎内存态(unknown|up|down)
   status?: 'up' | 'down' | 'unknown'
   latency_ms?: number | null
 }
@@ -35,7 +35,7 @@ export interface Group {
 }
 
 export interface Config {
-  general: Record<string, any>
+  general: Record<string, unknown>
   service_groups: Group[]
   bookmark_groups: Group[]
 }
@@ -73,3 +73,37 @@ export interface SystemInfo {
   net_tx_bps?: number
 }
 
+// /api/status 的单节点心跳窗口(status 页)
+export interface StatusBar {
+  t: number // 桶起始 unix millis
+  total: number // 0 = 无数据
+  ups: number
+  avg_ms: number | null
+}
+
+export interface LastIncident {
+  started_at: number // unix millis
+  message: string
+}
+
+export interface StatusService {
+  id: number
+  name: string
+  status: 'up' | 'down' | 'unknown'
+  latency_ms?: number | null
+  uptime_24h: number | null
+  last_incident: LastIncident | null
+  bars: StatusBar[]
+}
+
+// 管理台会话(GET /api/admin/session)
+export interface NotificationInfo {
+  url: string
+  topic: string
+  has_token: boolean
+}
+
+export interface SessionInfo {
+  authed: boolean
+  notification?: NotificationInfo | null
+}

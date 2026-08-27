@@ -1,47 +1,31 @@
-# Svelte + TS + Vite
+# foyer-web
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+Qwik v2(beta)+ TS + Vite。构建产物为纯静态 HTML/CSS/JS,由仓库根目录的 Go 二进制
+`go:embed` 后直接伺服(`/`、`/status`、`/admin` 走干净链接回退)。
 
-## Recommended IDE Setup
+## 结构
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+- `src/routes/` 三条路由:`index.tsx`(面板)、`status/`(监控)、`admin/`(管理台)
+- `src/components/` 页面级组件,目录式聚合(`name/name.tsx + name.module.css`)
+- `src/lib/` 类型 / 格式化 / sessionStorage 缓存 / 错误翻译 / 暗色图标判定
+- `src/styles/` 设计令牌(tokens)与全局基线(base)/ UI 原语(ui),经 `src/global.css` 汇入
+- `adapters/ssg/vite.config.ts` 静态生成适配器(官方 ssgAdapter 模板)
 
-## Need an official Svelte framework?
+## 约定
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+- 组件样式一律 CSS Modules(`*.module.css`),类名驼峰;跨组件原语(`btn`/`input`
+  /`card`/`dot`… 与 `mono`)在 `styles/ui.css` 全局提供,不进模块
+- 浏览器副作用(EventSource、轮询、sessionStorage、焦点管理)收敛在
+  `useVisibleTask$`,SSG 构建期不会执行;纯派生用 `useComputed$`
+- API 一律相对路径,dev 由 vite 代理到 `127.0.0.1:3002`(Go: `FOYER_DEV=1 go run .`)
 
-## Technical considerations
+## 常用命令
 
-**Why use this over SvelteKit?**
-
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
+```sh
+bun install
+bun run dev            # SSR dev(:5173),需另起 FOYER_DEV=1 go run .
+bun run build          # 客户端产物 + SSG → dist/
+bun run check          # tsc --noEmit
 ```
+
+部署走仓库根目录 `./deploy.sh gxd`(先前端构建再编译 Go 嵌入)。
