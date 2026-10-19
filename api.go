@@ -140,44 +140,6 @@ FROM services WHERE group_id=? ORDER BY sort`, g.ID)
 	}{general, svcGroups, bmGroups})
 }
 
-// ===== /api/system =====
-
-// general.telemetry_public=false 时仅认证会话可见——主机指纹不再对匿名访客
-// 暴露（审计 #13）；缺省/解析失败保持公开面板行为。
-func (a *app) telemetryPublic(r *http.Request) bool {
-	if a.isAuthed(r) {
-		return true
-	}
-	var raw string
-	err := a.db.QueryRow(`SELECT value_json FROM settings WHERE key='general'`).Scan(&raw)
-	if err != nil {
-		return true
-	}
-	var v struct {
-		TelemetryPublic *bool `json:"telemetry_public"`
-	}
-	if json.Unmarshal([]byte(raw), &v) != nil {
-		return true
-	}
-	if v.TelemetryPublic == nil {
-		return true
-	}
-	return *v.TelemetryPublic
-}
-
-func (a *app) getSystem(w http.ResponseWriter, r *http.Request) {
-	if !a.telemetryPublic(r) {
-		unauthorized(w)
-		return
-	}
-	stats, err := sampleStats()
-	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-	writeJSON(w, http.StatusOK, stats)
-}
-
 // ===== 认证与管理 =====
 
 // cookieToken 从 Cookie 头解析会话 token（分号切分后 trim）。
@@ -318,16 +280,15 @@ func (a *app) putPassword(w http.ResponseWriter, r *http.Request) {
 
 // ----- 站点设置（general：title/description）-----
 
-// 更新 settings.general 的 title/description/telemetry_public；其余字段原样保留。
+// 更新 settings.general 的 title/description；其余字段原样保留。
 func (a *app) putSettings(w http.ResponseWriter, r *http.Request) {
 	if !a.isAuthed(r) {
 		unauthorized(w)
 		return
 	}
 	body, ok := decodeJSON[struct {
-		Title           string `json:"title"`
-		Description     string `json:"description"`
-		TelemetryPublic *bool  `json:"telemetry_public"`
+		Title       string `json:"title"`
+		Description string `json:"description"`
 	}](w, r)
 	if !ok {
 		return
@@ -355,9 +316,6 @@ func (a *app) putSettings(w http.ResponseWriter, r *http.Request) {
 	}
 	obj["title"] = body.Title
 	obj["description"] = body.Description
-	if body.TelemetryPublic != nil { // null = 不改动现有值
-		obj["telemetry_public"] = *body.TelemetryPublic
-	}
 	out, _ := json.Marshal(obj)
 	if _, err := a.db.Exec(
 		`INSERT INTO settings(key,value_json) VALUES('general',?) ON CONFLICT(key) DO UPDATE SET value_json=excluded.value_json`,

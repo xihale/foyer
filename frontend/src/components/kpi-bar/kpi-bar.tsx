@@ -10,37 +10,27 @@ interface KpiBarProps {
 }
 
 export const KpiBar = component$<KpiBarProps>(({ win, uptime, upCount, total, downCount }) => {
-  const fmtUptime = (u: number | null) => (u === null ? '--' : `${u.toFixed(2)}%`)
+  const fmtUptime = uptime === null ? '--' : `${uptime.toFixed(2)}%`
+  const winLabel = win === '24h' ? '24 小时' : '7 天'
 
   return (
-    <section class={['stat', styles.kpi].join(' ')}>
-      <div class={styles.kpiCol}>
-        <div class={['mono', styles.k].join(' ')}>
-          <span class={styles.idx}>01</span>
-          <span>{win} 可用率</span>
-        </div>
-        <div class={['mono', styles.v, styles.vOk].join(' ')}>{fmtUptime(uptime)}</div>
-      </div>
-
-      <div class={styles.kpiCol}>
-        <div class={['mono', styles.k].join(' ')}>
-          <span class={styles.idx}>02</span>
-          <span>在线节点</span>
-        </div>
-        <div class={'mono ' + styles.v}>
+    <section class={styles.kpi} aria-label="可用情况">
+      <span class={styles.item}>
+        <span class={styles.k}>{winLabel}可用</span>
+        <span class={['mono', styles.v].join(' ')}>{fmtUptime}</span>
+      </span>
+      <span class={styles.item}>
+        <span class={styles.k}>在线</span>
+        <span class={['mono', styles.v].join(' ')}>
           {upCount} <span class={styles.sub}>/ {total}</span>
-        </div>
-      </div>
-
-      <div class={styles.kpiCol}>
-        <div class={['mono', styles.k].join(' ')}>
-          <span class={styles.idx}>03</span>
-          <span>离线节点</span>
-        </div>
-        <div class={['mono', styles.v, downCount > 0 && styles.vBad].filter(Boolean).join(' ')}>
+        </span>
+      </span>
+      <span class={styles.item}>
+        <span class={styles.k}>离线</span>
+        <span class={['mono', styles.v, downCount > 0 ? styles.vBad : ''].filter(Boolean).join(' ')}>
           {downCount}
-        </div>
-      </div>
+        </span>
+      </span>
     </section>
   )
 })

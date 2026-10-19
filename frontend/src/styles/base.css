@@ -1,11 +1,4 @@
-/* ==========================================================================
-   Base Layer: Reset, Swiss Typography & Global Element Styles
-   ========================================================================== */
-
-/* MPA 跨文档视图过渡: 页面间导航由浏览器执行 crossfade, 消除整页硬切闪白 */
-@view-transition {
-  navigation: auto;
-}
+/* 基线：衬线名牌字，页面之间走客户端导航。 */
 
 *,
 *::before,
@@ -82,10 +75,9 @@ input[type='number'] {
   appearance: textfield;
 }
 
-/* Swiss Style 文本选择: 高对比度选中底色 */
 ::selection {
   background: var(--color-text-primary);
-  color: var(--color-surface);
+  color: var(--color-canvas);
 }
 
 /* Swiss 几何细致发丝滚动条 */
@@ -126,4 +118,5 @@ input[type='number'] {
     transition-duration: 0.01ms !important;
   }
 }
+
 

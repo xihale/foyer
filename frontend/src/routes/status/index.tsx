@@ -130,7 +130,7 @@ export default component$(() => {
 
   return (
     <div class={styles.page}>
-      <AppHeader active="status" label="服务监控" siteTitle={cachedCfg?.general?.title as string ?? 'foyer'}>
+      <AppHeader active="status" siteTitle={cachedCfg?.general?.title as string ?? 'foyer'}>
         <div q:slot="actions" class={styles.switchDesktop}>
           <WinSwitch win={win} />
         </div>
@@ -157,17 +157,9 @@ export default component$(() => {
 
             <section class={styles.stack} aria-label="服务心跳列表">
               <div class={styles.sectionHead}>
-                <span class={['mono', styles.groupTitle].join(' ')}>
-                  节点状态 / MONITORED NODES
-                </span>
-                <span
-                  class={['mono', styles.updated, refreshFailed.value && styles.fail]
-                    .filter(Boolean)
-                    .join(' ')}
-                  title="每 10 秒自动刷新"
-                >
+                <span class={styles.updated} title="每 10 秒自动刷新">
                   {refreshFailed.value
-                    ? '刷新失败 · 显示上次数据'
+                    ? '刷新失败，显示上次数据'
                     : updatedAt.value
                       ? `更新于 ${updatedAt.value}`
                       : ''}
@@ -186,19 +178,11 @@ export default component$(() => {
             </section>
 
             {/* 状态图例(dot 变体样式在全局 ui.css) */}
-            <div class={['mono', styles.legend].join(' ')}>
-              <span>
-                <i class="dot" data-state="up"></i>正常
-              </span>
-              <span>
-                <i class="dot dot-warn"></i>波动
-              </span>
-              <span>
-                <i class="dot" data-state="down"></i>离线
-              </span>
-              <span>
-                <i class="dot dot-none"></i>无数据
-              </span>
+            <div class={styles.legend}>
+              <span><i class={styles.swatch} data-state="up"></i>正常</span>
+              <span><i class={styles.swatch} data-state="partial"></i>波动</span>
+              <span><i class={styles.swatch} data-state="down"></i>离线</span>
+              <span><i class={styles.swatch} data-state="none"></i>无数据</span>
             </div>
           </div>
         )}

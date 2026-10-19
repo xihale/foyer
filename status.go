@@ -49,7 +49,7 @@ SELECT s.id, s.name,
   (SELECT COUNT(*) FROM heartbeats h WHERE h.service_id=s.id AND h.ts>? AND h.status=1) AS ups,
   (SELECT started_at FROM incidents i WHERE i.service_id=s.id ORDER BY started_at DESC LIMIT 1),
   (SELECT message FROM incidents i WHERE i.service_id=s.id ORDER BY started_at DESC LIMIT 1)
-FROM services s WHERE s.monitor_enabled=1 ORDER BY s.name`, sinceMs, sinceMs)
+FROM services s JOIN groups g ON g.id = s.group_id WHERE s.monitor_enabled=1 ORDER BY g.sort, s.sort, s.id`, sinceMs, sinceMs)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return

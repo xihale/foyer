@@ -63,7 +63,6 @@ export default component$(() => {
   // ---- 站点设置表单 ----
   const siteTitle = useSignal('')
   const siteDescription = useSignal('')
-  const telemetryPublic = useSignal(true)
 
   // ---- ntfy 表单 ----
   const ntfyUrl = useSignal('')
@@ -162,7 +161,6 @@ export default component$(() => {
     setCached('foyer_config', c)
     siteTitle.value = typeof c.general?.title === 'string' ? c.general.title : ''
     siteDescription.value = typeof c.general?.description === 'string' ? c.general.description : ''
-    telemetryPublic.value = c.general?.telemetry_public !== false
   })
 
   // 写入一成功就提示；列表刷新失败另报，避免用户空等、误以为没保存
@@ -207,7 +205,6 @@ export default component$(() => {
       siteTitle.value = typeof cachedConfig.general?.title === 'string' ? cachedConfig.general.title : ''
       siteDescription.value =
         typeof cachedConfig.general?.description === 'string' ? cachedConfig.general.description : ''
-      telemetryPublic.value = cachedConfig.general?.telemetry_public !== false
     }
     section.value = sectionFromHash()
 
@@ -264,7 +261,6 @@ export default component$(() => {
       await api('/api/admin/settings', 'PUT', {
         title: siteTitle.value.trim(),
         description: siteDescription.value.trim(),
-        telemetry_public: telemetryPublic.value,
       })
     }, '设置已保存')
     saving.value = false
@@ -511,7 +507,21 @@ export default component$(() => {
 
   return (
     <div class={styles.page}>
-      <AppHeader active="admin" label="控制台" siteTitle={(config.value?.general?.title as string | undefined) ?? 'foyer'} />
+      <AppHeader active="admin" siteTitle={(config.value?.general?.title as string | undefined) ?? 'foyer'}>
+        {session.value?.authed ? (
+          <div q:slot="below">
+            <AdminSidebar
+              section={section.value}
+              counts={{
+                groups: serviceGroups.value.length + bookmarkGroups.value.length,
+                services: services.value.length,
+                bookmarks: bookmarks.value.length,
+              }}
+              onSelect$={(s) => selectSection(s)}
+            />
+          </div>
+        ) : null}
+      </AppHeader>
 
       {initError.value ? (
         <main class={styles.main}>
@@ -524,17 +534,16 @@ export default component$(() => {
         <div class={styles.loginWrap}>
           <form class={styles.login} preventdefault:submit onSubmit$={() => login()}>
             <div>
-              <h2 class="page-title">管理认证</h2>
-              <p class="page-sub">请输入管理员通行密码以解锁控制台</p>
+              <h2 class="page-title">设置</h2>
+              <p class="page-sub">输入密码</p>
             </div>
 
             <label class={styles.field}>
-              <span class="field-label">通行密码</span>
+              <span class="field-label">密码</span>
               <input
                 type="password"
                 bind:value={password}
                 ref={loginInput}
-                placeholder="••••••••"
                 aria-label="管理密码"
                 autocomplete="current-password"
                 class="input"
@@ -544,7 +553,7 @@ export default component$(() => {
             {loginError.value ? <div class="alert">{loginError.value}</div> : null}
 
             <button type="submit" disabled={busy.value || !password.value} class={['btn', 'btn-primary', styles.wide].join(' ')}>
-              {busy.value ? '验证中...' : '解锁控制台'}
+              {busy.value ? '正在核对' : '进入'}
             </button>
           </form>
         </div>
@@ -568,7 +577,6 @@ export default component$(() => {
               <SiteSettingsPanel
                 siteTitle={siteTitle}
                 siteDescription={siteDescription}
-                telemetryPublic={telemetryPublic}
                 saving={saving.value}
                 onSave$={() => saveSettings()}
               />

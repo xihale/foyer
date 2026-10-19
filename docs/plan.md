@@ -194,7 +194,6 @@ uptime% 计算：≤45d 从 heartbeats 聚合；更早走 rollup_daily。
 
 ```
 GET  /api/config                     # 面板内容（YAML 解析结果 + 实时状态合并）
-GET  /api/system                     # cpu/mem/disk
 GET  /api/docker/containers          # 容器列表/状态
 GET  /api/status/:slug               # 状态页数据（公开）
 GET  /api/monitors                   # 列表+当前状态+uptime%（admin）

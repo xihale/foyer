@@ -10,25 +10,25 @@ interface BookmarkGroupProps {
 export const BookmarkGroup = component$<BookmarkGroupProps>(({ group }) => {
   return (
     <section class={styles.group} aria-label={group.name}>
-      <div class={styles.head}>
-        <div class={styles.titleWrap}>
-          <span class={['mono', styles.groupTitle].join(' ')}>{group.name}</span>
-          <span class={['mono', styles.count].join(' ')}>{group.bookmarks?.length ?? 0}</span>
-        </div>
-      </div>
-
-      <div class={styles.tags}>
+      <h2 class={styles.groupTitle}>{group.name}</h2>
+      <div class={styles.list}>
         {(group.bookmarks ?? []).map((b) => (
           <a
             href={b.href}
             target="_blank"
             rel="noreferrer"
-            title={b.name}
-            class={styles.chip}
+            class={styles.row}
             key={b.id}
           >
-            {b.icon ? <IconImage src={b.icon} class={styles.icon} /> : null}
-            <span>{b.name}</span>
+            <span class={styles.notchGap} aria-hidden="true"></span>
+            {b.icon ? (
+              <IconImage src={b.icon} class={styles.icon} />
+            ) : (
+              <span class={styles.fallback} aria-hidden="true">
+                {b.name.slice(0, 1)}
+              </span>
+            )}
+            <span class={styles.name}>{b.name}</span>
           </a>
         ))}
       </div>

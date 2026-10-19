@@ -196,7 +196,6 @@ func (a *app) routes() http.Handler {
 	mux.HandleFunc("GET /api/health", a.health)
 	mux.HandleFunc("GET /api/config", a.getConfig)
 	mux.HandleFunc("GET /api/events", a.getEvents)
-	mux.HandleFunc("GET /api/system", a.getSystem)
 	mux.HandleFunc("GET /api/status", a.getStatus)
 
 	// 认证与管理（/admin 用）

@@ -46,33 +46,6 @@ export interface ServiceStatus {
   latency_ms: number | null
 }
 
-// /api/system 的采样(面板遥测栏)
-export interface DiskMount {
-  mount: string
-  total_mb: number
-  used_mb: number
-}
-
-export interface SystemInfo {
-  cpu_percent?: number
-  cpu_cores?: number
-  cpu_model?: string
-  mem_total_mb?: number
-  mem_used_mb?: number
-  swap_total_mb?: number
-  swap_used_mb?: number
-  disks?: DiskMount[]
-  load_1?: number
-  load_5?: number
-  load_15?: number
-  uptime_s?: number
-  hostname?: string
-  os_name?: string
-  kernel?: string
-  net_rx_bps?: number
-  net_tx_bps?: number
-}
-
 // /api/status 的单节点心跳窗口(status 页)
 export interface StatusBar {
   t: number // 桶起始 unix millis

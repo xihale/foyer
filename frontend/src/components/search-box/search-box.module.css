@@ -1,28 +1,40 @@
 .searchBar {
-  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
-  height: 32px;
-  padding: 0 8px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-s);
+  min-height: 36px;
+  /* 两条边框叠在同一个盒子里,聚焦只换颜色,不挤动下方内容 */
+  border-bottom: 1px solid var(--color-border-strong);
+  box-shadow: inset 0 -1px 0 transparent;
   transition:
     border-color var(--transition),
-    background-color var(--transition);
-}
-.searchBar:hover {
-  border-color: var(--color-text-secondary);
+    box-shadow var(--transition);
 }
 .searchBar:focus-within {
-  border-color: var(--color-border-focus);
-  background: var(--color-surface);
+  border-bottom-color: var(--color-text-primary);
+  box-shadow: inset 0 -1px 0 var(--color-text-primary);
 }
-@media (min-width: 640px) {
-  .searchBar {
-    max-width: 18rem;
-  }
+
+.inputBox {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 6px 8px 6px 0;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  outline: none;
+}
+.inputBox::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.kbdBadge {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--color-text-tertiary);
 }
 @media (max-width: 639px) {
   .kbdBadge {
@@ -30,71 +42,16 @@
   }
 }
 
-.glyph {
-  width: 14px;
-  height: 14px;
-  color: var(--color-text-tertiary);
-  flex-shrink: 0;
-  pointer-events: none;
-  transition: color var(--transition);
-}
-.searchBar:focus-within .glyph {
-  color: var(--color-text-primary);
-}
-
-.inputBox {
-  flex: 1;
-  min-width: 0;
-  height: 100%;
-  padding: 0 6px;
-  background: transparent;
-  border: none;
-  font-size: 12.5px;
-  font-family: inherit;
-  color: var(--color-text-primary);
-  outline: none;
-}
-.inputBox::placeholder {
-  color: var(--color-text-quaternary);
-  font-size: 12px;
-}
-
-.kbdBadge {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  background: var(--color-surface-subtle);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--color-text-tertiary);
-  user-select: none;
-  pointer-events: none;
-}
-
 .clearBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
+  flex-shrink: 0;
   border: none;
   background: transparent;
-  border-radius: var(--radius-xs);
-  color: var(--color-text-tertiary);
-  outline: none;
-  padding: 0;
+  padding: 4px 0 4px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--color-text-secondary);
   cursor: pointer;
-  transition:
-    color var(--transition),
-    background-color var(--transition);
 }
 .clearBtn:hover {
   color: var(--color-text-primary);
-  background: var(--color-surface-subtle);
 }

@@ -1,70 +1,63 @@
 .group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
-.head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 2px;
-}
-.titleWrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 .groupTitle {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  margin: 22px 0 4px;
+  padding-left: 28px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
   color: var(--color-text-secondary);
 }
-.count {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--color-text-quaternary);
-}
 
-.tags {
+.list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  flex-direction: column;
 }
 
-/* Swiss Minimalist Tag / Chip */
-.chip {
-  display: inline-flex;
+.row {
+  display: grid;
+  grid-template-columns: 16px 22px minmax(0, 1fr);
+  column-gap: 10px;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  min-height: 28px;
-  font-size: 12px;
-  font-weight: 500;
+  min-height: 44px;
+  padding-right: 8px;
   color: var(--color-text-primary);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
   text-decoration: none;
-  transition:
-    color var(--transition),
-    border-color var(--transition),
-    background-color var(--transition);
+  transition: transform 80ms var(--ease-click);
 }
-.chip:hover {
-  color: var(--color-accent);
-  border-color: var(--color-border-strong);
+.row:hover {
   background: var(--color-surface-hover);
 }
-.chip:active {
-  background: var(--color-surface-subtle);
+.row:active {
+  transform: translateX(2px);
+}
+
+.notchGap {
+  width: 2px;
+  height: 16px;
 }
 
 .icon {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   object-fit: contain;
-  border-radius: var(--radius-none);
+}
+.fallback {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+.name {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

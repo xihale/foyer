@@ -38,24 +38,15 @@ export const HeartbeatRow = component$<HeartbeatRowProps>(({ service: s, win, sl
 
   return (
     <>
-      <div class={styles.row}>
+      <div class={styles.row} data-state={s.status}>
         <div class={styles.top}>
-          {/* 左侧:服务名 + 状态指示 (正常时不显示多余的 [NORMAL] 标签) */}
           <div class={styles.id}>
             <span class="dot" data-state={s.status === 'unknown' ? undefined : s.status}></span>
             <span class={styles.name}>{s.name}</span>
-            {s.status === 'down' ? (
-              <span class={['mono', styles.state].join(' ')} data-state="down">
-                [OFFLINE]
-              </span>
-            ) : s.status === 'unknown' ? (
-              <span class={['mono', styles.state].join(' ')} data-state="unknown">
-                [PENDING]
-              </span>
-            ) : null}
+            {s.status === 'down' ? <span class={styles.state}>离线</span> : null}
+            {s.status === 'unknown' ? <span class={styles.state}>等待</span> : null}
           </div>
 
-          {/* 右侧:当前延迟 + 窗口可用率 */}
           <div class={['mono', styles.metrics].join(' ')}>
             {s.status === 'up' && typeof s.latency_ms === 'number' && s.latency_ms >= 0 ? (
               <span class={styles.lat}>
@@ -83,7 +74,7 @@ export const HeartbeatRow = component$<HeartbeatRowProps>(({ service: s, win, sl
                 ? [fmtBarTime(b.t, win), '无探活数据']
                 : [
                     `${fmtBarTime(b.t, win)} – ${fmtBarTime(end, win)}`,
-                    `${b.ups}/${b.total} 次成功 (${Math.round((b.ups / b.total) * 100)}%)${typeof b.avg_ms === 'number' ? ` · 延迟 ${Math.round(b.avg_ms)}ms` : ''}`,
+                    `${b.ups}/${b.total} 次成功 (${Math.round((b.ups / b.total) * 100)}%)${typeof b.avg_ms === 'number' ? `，延迟 ${Math.round(b.avg_ms)}ms` : ''}`,
                   ]
             const pad = 96
             const x = Math.min(Math.max(e.clientX, pad), Math.max(pad, window.innerWidth - pad))
@@ -100,7 +91,7 @@ export const HeartbeatRow = component$<HeartbeatRowProps>(({ service: s, win, sl
         {/* 最近故障记录 */}
         {s.last_incident ? (
           <div class={['mono', styles.incident].join(' ')}>
-            <span class={styles.mark}>! INCIDENT:</span>
+            <span class={styles.mark}>故障</span>
             <span class={styles.msg}>{s.last_incident.message}</span>
             <span class={styles.time}>{fmtTime(s.last_incident.started_at)}</span>
           </div>

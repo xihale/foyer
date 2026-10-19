@@ -29,14 +29,10 @@
 }
 .login {
   width: 100%;
-  max-width: 24rem;
+  max-width: 22rem;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 28px 24px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
 }
 .field {
   display: block;
@@ -52,21 +48,28 @@
   flex-direction: column;
   flex: 1;
   width: 100%;
-  max-width: 72rem;
+  max-width: 48rem;
   margin: 0 auto;
-  padding: 20px 16px 48px;
+  padding: 12px 16px 48px;
   gap: 24px;
 }
 @media (min-width: 768px) {
   .workspace {
     flex-direction: row;
-    padding: 28px 24px 64px;
+    padding: 16px 24px 64px;
     gap: 32px;
   }
 }
 
+/* 手机上分区导航移到页头 below 行,和首页/监控保持一致 */
 .side {
+  display: none;
   flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .side {
+    display: block;
+  }
 }
 @media (min-width: 768px) {
   .side {

@@ -4,7 +4,7 @@
 
 ## Pages
 
-- [首页](https://home.xeed.ink/): 服务面板——受监控服务的实时状态、遥测摘要与快速书签分组。
+- [首页](https://home.xeed.ink/): 服务面板——受监控服务的实时状态与快速书签分组。
 - [状态页](https://home.xeed.ink/status): 公开的在线率报告，支持 24 小时 / 7 天两种窗口。
 
 ## Notes

@@ -1,9 +1,5 @@
-/* ==========================================================================
-   Swiss Style & Minimalism UI Component Library
-   Precision Grid, Typographic Hierarchy, Hairline Borders & High Legibility
-   ========================================================================== */
+/* 名牌控件：直角、墨底石字、按下下沉 1px。状态刻痕不是圆点。 */
 
-/* ===== 弹性布局原子(表单行内 grow/shrink 共用) ===== */
 .grow {
   flex: 1 1 auto;
   min-width: 0;
@@ -12,116 +8,94 @@
   flex-shrink: 0;
 }
 
-/* ===== 状态指示点 (Swiss Status Indicator) ===== */
-
 .dot {
-  position: relative;
   display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: var(--radius-xs);
+  width: 4px;
+  height: 10px;
   flex-shrink: 0;
-  background: var(--color-text-quaternary);
-  transition: background-color var(--transition);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--color-text-primary);
+  transform-origin: top center;
+  transition:
+    height var(--transition),
+    background-color var(--transition),
+    box-shadow var(--transition);
 }
 .dot[data-state='up'] {
-  background: var(--color-success);
+  height: 22px;
+  background: var(--color-text-primary);
+  box-shadow: none;
 }
 .dot[data-state='down'] {
+  width: 10px;
+  height: 4px;
   background: var(--color-error);
+  box-shadow: none;
+  align-self: center;
 }
-/* 图例用变体(不参与状态脉冲) */
 .dot.dot-warn {
+  width: 4px;
+  height: 16px;
   background: var(--color-warning);
+  box-shadow: none;
 }
 .dot.dot-none {
-  background: var(--color-border-strong);
+  height: 4px;
+  background: var(--color-border);
+  box-shadow: none;
 }
-
 .dot.pulse {
-  animation: dot-glow 2.5s ease-in-out infinite;
+  animation: none;
 }
 
-@keyframes dot-glow {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.45;
-  }
+.card,
+.list,
+.stat {
+  background: transparent;
+  border: none;
+  border-radius: 0;
 }
-
-/* ===== 容器体系 (Swiss Modular Containers) ===== */
-
-/* 静态信息卡 (Modular Surface Card) */
-.card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
-  padding: 20px;
-}
-
-/* 可交互条目卡 (Interactive Grid Card) */
 .card-item {
   position: relative;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
-  overflow: hidden;
-  transition:
-    border-color var(--transition),
-    background-color var(--transition);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: inherit;
 }
 .card-item:hover {
-  border-color: var(--color-border-strong);
   background: var(--color-surface-hover);
 }
 .card-item:active {
-  background: var(--color-surface-subtle);
+  transform: translateX(2px);
 }
 
-/* 列表容器 (Modular Hairline List) */
-.list {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
-  overflow: hidden;
-}
 .list > * + * {
   border-top: 1px solid var(--color-border);
 }
 
-/* 列表行骨架 (Swiss List Item) */
 .list-row {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 12px 16px;
+  padding: 12px 0;
   transition: background-color var(--transition);
 }
 .list-row:hover {
   background: var(--color-surface-hover);
 }
-
 .list-icon {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
-  border-radius: var(--radius-xs);
   object-fit: contain;
 }
 .list-icon.fallback {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-surface-subtle);
-  border: 1px solid var(--color-border);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 14px;
   color: var(--color-text-primary);
 }
-
 .list-info {
   min-width: 0;
   flex: 1;
@@ -132,58 +106,50 @@
   gap: 8px;
 }
 .list-name {
-  font-size: 13.5px;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  line-height: 1.35;
   color: var(--color-text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .list-sub {
   margin-top: 2px;
-  font-size: 12px;
-  color: var(--color-text-tertiary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--color-text-secondary);
 }
-
-/* 状态摘要条 / KPI容器 */
-.stat {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
-}
-
-/* ===== 表单体系 (Swiss Form Controls) ===== */
 
 .input,
 .select {
   width: 100%;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-s);
-  padding: 8px 12px;
-  font-size: 13.5px;
+  min-height: 40px;
+  padding: 8px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border-strong);
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.4;
   color: var(--color-text-primary);
   outline: none;
+  /* 聚焦只加一道内阴影,不加粗边框:表单项不会把下面的内容顶下去 */
+  box-shadow: inset 0 -1px 0 transparent;
   transition:
     border-color var(--transition),
-    background-color var(--transition);
+    box-shadow var(--transition);
 }
 .input::placeholder,
 .select::placeholder {
-  color: var(--color-text-quaternary);
+  color: var(--color-text-tertiary);
 }
 .input:hover,
 .select:hover {
-  border-color: var(--color-text-secondary);
+  border-bottom-color: var(--color-text-secondary);
 }
 .input:focus,
 .select:focus {
-  border-color: var(--color-border-focus);
-  background: var(--color-surface);
+  border-bottom-color: var(--color-text-primary);
+  box-shadow: inset 0 -1px 0 var(--color-text-primary);
 }
 .select {
   cursor: pointer;
@@ -191,74 +157,61 @@
 
 .field-label {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 11px;
+  margin-bottom: 4px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  line-height: 1.4;
   color: var(--color-text-secondary);
-  margin-bottom: 6px;
 }
 .field-hint {
-  font-size: 11.5px;
-  color: var(--color-text-tertiary);
-  margin-top: 5px;
-  line-height: 1.4;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
 }
 
-/* Checkbox */
 .check {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--color-text-primary);
-  cursor: pointer;
-  user-select: none;
 }
 .check input {
   accent-color: var(--color-accent);
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  border-radius: var(--radius-xs);
+  width: 16px;
+  height: 16px;
 }
 
-/* ===== 按钮体系 (Swiss Structured Buttons) ===== */
-
 .btn {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-s);
-  padding: 6px 14px;
-  min-height: 32px;
-  font-size: 12.5px;
-  font-weight: 600;
-  line-height: 1.4;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-text-primary);
+  border-radius: 0;
+  background: transparent;
   color: var(--color-text-primary);
-  background: var(--color-surface);
-  user-select: none;
-  outline: none;
-  white-space: nowrap;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
   transition:
+    transform 80ms var(--ease-click),
     background-color var(--transition),
-    border-color var(--transition),
     color var(--transition);
-}
-.btn:disabled {
-  pointer-events: none;
-  opacity: 0.35;
 }
 .btn:focus-visible {
   outline: 2px solid var(--color-border-focus);
   outline-offset: 2px;
 }
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
 
-/* Primary Button: Swiss Blue-Green / Teal Accent */
 .btn-primary {
   background: var(--color-accent);
   border-color: var(--color-accent);
@@ -269,174 +222,141 @@
   border-color: var(--color-accent-hover);
 }
 .btn-primary:active:not(:disabled) {
-  opacity: 0.88;
+  transform: translateY(1px);
 }
 
-/* Secondary Button: Subtle Surface */
 .btn-secondary {
-  background: var(--color-surface-subtle);
-  border-color: var(--color-border);
+  background: transparent;
+  border-color: var(--color-border-strong);
   color: var(--color-text-primary);
 }
 .btn-secondary:hover:not(:disabled) {
-  background: var(--color-surface-muted);
-  border-color: var(--color-border-strong);
+  background: var(--color-surface-hover);
 }
 
-/* Danger Button */
 .btn-danger {
-  background: var(--color-error-bg);
-  border-color: var(--color-error-border);
+  background: transparent;
+  border-color: var(--color-error);
   color: var(--color-error-text);
 }
 .btn-danger:hover:not(:disabled) {
   background: var(--color-error);
   border-color: var(--color-error);
-  color: #ffffff;
+  color: var(--color-on-error);
 }
 
-/* Ghost / Micro Button */
 .btn-ghost {
+  min-height: 32px;
+  padding: 4px 8px;
+  border-color: transparent;
   background: transparent;
-  border: 1px solid var(--color-border);
-  padding: 3px 8px;
-  min-height: 24px;
-  font-size: 11.5px;
-  font-family: var(--font-mono);
   color: var(--color-text-secondary);
-  border-radius: var(--radius-xs);
 }
 .btn-ghost:hover:not(:disabled) {
   background: var(--color-surface-hover);
-  border-color: var(--color-border-strong);
   color: var(--color-text-primary);
 }
 
-/* Two-step Delete Confirmation Button */
 .btn-confirm {
   background: var(--color-error);
-  border: 1px solid var(--color-error);
-  color: #ffffff;
-  padding: 3px 8px;
-  min-height: 24px;
-  font-size: 11.5px;
-  font-weight: 600;
-  border-radius: var(--radius-xs);
+  border-color: var(--color-error);
+  color: var(--color-on-error);
 }
 .btn-confirm:hover:not(:disabled) {
-  background: #b91c1c;
+  background: var(--color-error-text);
+  border-color: var(--color-error-text);
+  color: var(--color-error-bg);
 }
 
-/* Close Button */
+.btn:disabled,
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-danger:disabled,
+.btn-ghost:disabled {
+  pointer-events: none;
+  opacity: 1;
+  background: var(--color-surface-muted);
+  border-color: var(--color-border);
+  color: var(--color-text-tertiary);
+}
+
 .btn-close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: 1px solid transparent;
-  background: transparent;
-  border-radius: var(--radius-xs);
+  width: 32px;
+  height: 32px;
   padding: 0;
-  font-size: 13px;
-  color: var(--color-text-tertiary);
-  outline: none;
-  transition:
-    background-color var(--transition),
-    color var(--transition),
-    border-color var(--transition);
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
 }
 .btn-close:hover {
-  background: var(--color-surface-subtle);
-  border-color: var(--color-border);
   color: var(--color-text-primary);
+  background: var(--color-surface-hover);
 }
 
-/* Navigation Link (Header / Minimalist Tab) */
 .link-nav {
-  position: relative;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-s);
+  min-height: 32px;
   padding: 4px 10px;
-  font-size: 12.5px;
-  font-weight: 500;
   color: var(--color-text-secondary);
-  outline: none;
-  transition:
-    color var(--transition),
-    background-color var(--transition);
+  text-decoration: none;
 }
 .link-nav:hover:not(.is-active) {
   color: var(--color-text-primary);
-  background: var(--color-surface-hover);
 }
 .link-nav.is-active {
   background: var(--color-accent);
   color: var(--color-on-accent);
   font-weight: 600;
 }
-.link-nav.is-active:hover {
-  background: var(--color-accent-hover);
-  color: var(--color-on-accent);
-}
-
-/* ===== 徽标 / 辅助标签 (Swiss Typographic Badge) ===== */
 
 .badge {
-  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  background: var(--color-surface-subtle);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
   padding: 1px 6px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
+  border: 1px solid var(--color-border-strong);
+  font-size: 13px;
+  font-weight: 600;
   color: var(--color-text-secondary);
 }
 
-/* ===== 排版与标题体系 (Swiss Typographic Hierarchy) ===== */
-
 .page-title {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.3;
   color: var(--color-text-primary);
 }
 .page-sub {
-  margin-top: 4px;
-  font-size: 12.5px;
+  margin: 6px 0 0;
+  max-width: 38rem;
+  font-size: 15px;
+  line-height: 1.55;
   color: var(--color-text-secondary);
-  line-height: 1.5;
 }
 .group-title {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
   color: var(--color-text-secondary);
-  text-transform: uppercase;
 }
 
 .empty {
   padding: 48px 0;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 12.5px;
-  color: var(--color-text-quaternary);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
 }
 
 .alert {
+  padding: 10px 12px;
   background: var(--color-error-bg);
   border: 1px solid var(--color-error-border);
-  border-radius: var(--radius-s);
-  padding: 10px 14px;
-  font-size: 13px;
+  font-size: 15px;
+  line-height: 1.5;
   color: var(--color-error-text);
 }
-
-
-

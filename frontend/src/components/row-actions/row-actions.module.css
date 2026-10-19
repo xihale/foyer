@@ -35,11 +35,12 @@
 }
 .confirm {
   background: var(--color-error);
-  color: #ffffff;
+  color: var(--color-on-error);
   font-weight: 600;
 }
 .confirm:hover {
-  background: #b91c1c;
+  background: var(--color-error-text);
+  color: var(--color-error-bg);
 }
 
 .sep {

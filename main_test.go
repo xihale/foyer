@@ -138,49 +138,6 @@ type errString string
 
 func (e errString) Error() string { return string(e) }
 
-func TestParseCpuLine(t *testing.T) {
-	snap, err := parseCpuLine("cpu  100 10 200 3000 40 5 6 7 8 9")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if snap.total != 3385 || snap.idle != 3040 {
-		t.Fatalf("total=%d idle=%d, want 3385/3040", snap.total, snap.idle)
-	}
-}
-
-func TestParseNetDev(t *testing.T) {
-	text := "Inter-|   Receive                                                |  Transmit\n" +
-		" face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed\n" +
-		"    lo: 100 1 0 0 0 0 0 0 100 1 0 0 0 0 0 0\n" +
-		"  eth0: 1000 10 0 0 0 0 0 0 200 2 0 0 0 0 0 0\n" +
-		" wlan0: 300 3 0 0 0 0 0 0 4000 4 0 0 0 0 0 0\n"
-	// parseNetDev 逻辑内嵌在 sampleNet（有全局状态），这里只验证字段布局语义:
-	// 第 0 列 rx、第 8 列 tx、跳过 lo
-	rx, tx := netDevTotals(text)
-	if rx != 1300 || tx != 4200 {
-		t.Fatalf("rx=%d tx=%d, want 1300/4200", rx, tx)
-	}
-}
-
-func TestUnescapeMount(t *testing.T) {
-	if got := unescapeMount(`/mnt/my\040share`); got != "/mnt/my share" {
-		t.Fatalf("got %q", got)
-	}
-	if got := unescapeMount("/home"); got != "/home" {
-		t.Fatalf("got %q", got)
-	}
-}
-
-func TestParseLoadAvg(t *testing.T) {
-	l1, l5, l15, err := parseLoadAvgText("0.42 0.35 0.30 1/382 12345\n")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if l1 != 0.42 || l5 != 0.35 || l15 != 0.30 {
-		t.Fatalf("got %v/%v/%v", l1, l5, l15)
-	}
-}
-
 func TestVersionedIcon(t *testing.T) {
 	t.Chdir(t.TempDir())
 	os.MkdirAll("data/icons", 0o755)

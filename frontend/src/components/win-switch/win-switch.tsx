@@ -7,22 +7,22 @@ interface WinSwitchProps {
   win: Signal<'24h' | '7d'>
 }
 
-/** 24h / 7d 切换:Swiss Segmented Switch */
+const labels = { '24h': '24 小时', '7d': '7 天' } as const
+
 export const WinSwitch = component$<WinSwitchProps>(({ win }) => {
   return (
-    <div class={styles.winSwitch} role="radiogroup" aria-label="时间窗口">
+    <div class={styles.winSwitch} data-win={win.value} role="radiogroup" aria-label="时间窗口">
+      <span class={styles.thumb} aria-hidden="true"></span>
       {(['24h', '7d'] as const).map((w) => (
         <button
           type="button"
           key={w}
-          class={['mono', styles.opt, win.value === w && styles.isActive]
-            .filter(Boolean)
-            .join(' ')}
+          class={[styles.opt, win.value === w && styles.isActive].filter(Boolean).join(' ')}
           role="radio"
           aria-checked={win.value === w}
           onClick$={() => (win.value = w)}
         >
-          {w}
+          {labels[w]}
         </button>
       ))}
     </div>

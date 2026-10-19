@@ -11,9 +11,8 @@ import { AppHeader } from '~/components/app-header/app-header'
 import { SearchBox } from '~/components/search-box/search-box'
 import { BookmarkGroup } from '~/components/bookmark-group/bookmark-group'
 import { ServiceGroup } from '~/components/service-group/service-group'
-import { TelemetryBar } from '~/components/telemetry-bar/telemetry-bar'
-import { getCached, removeCached, setCached } from '~/lib/cache'
-import type { Config, ServiceStatus, SystemInfo } from '~/lib/types'
+import { getCached, setCached } from '~/lib/cache'
+import type { Config, ServiceStatus } from '~/lib/types'
 import styles from './panel.module.css'
 
 interface StatusEvent {
@@ -48,7 +47,6 @@ export default component$(() => {
   const stale = useSignal(false)
   const statuses = useSignal<Map<number, ServiceStatus>>(new Map())
   const connected = useSignal(false)
-  const system = useSignal<SystemInfo | null>(null)
   const searchQuery = useSignal('')
   // 桌面(顶栏)/移动(页头下方)两个搜索框同时挂载、靠 CSS 显隐,/ 快捷键聚焦可见的那个
   const searchDesktopRef = useSignal<HTMLInputElement>()
@@ -181,58 +179,6 @@ export default component$(() => {
     cleanup(() => es.close())
   })
 
-  // 系统资源:立即拉取一次,之后每 3s 刷新;失败静默降级。
-  // 页面不可见时暂停轮询(后台 tab 不空耗),回来立即补一次;
-  // 缓存至多 30s 落一次盘,避免每 3s 全量序列化写 sessionStorage。
-  // 401 = 遥测被管理端关闭:连同 sessionStorage 旧快照一并清掉,否则缓存的
-  // 旧数据会让遥测卡在开关关闭后仍然常驻显示
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ cleanup }) => {
-    let alive = true
-    let lastCached = 0
-
-    const cachedSystem = getCached<SystemInfo>('foyer_system')
-    if (cachedSystem) system.value = cachedSystem
-
-    const load = () => {
-      fetch('/api/system')
-        .then((r) =>
-          r.ok ? (r.json() as Promise<SystemInfo>) : Promise.reject(new Error(String(r.status))),
-        )
-        .then((d) => {
-          if (alive && d && typeof d === 'object') {
-            system.value = d
-            if (Date.now() - lastCached > 30_000) {
-              setCached('foyer_system', d)
-              lastCached = Date.now()
-            }
-          }
-        })
-        .catch((e: unknown) => {
-          if (!alive) return
-          if (e instanceof Error && e.message === '401') {
-            system.value = null
-            removeCached('foyer_system')
-          }
-          /* 其余失败静默降级 */
-        })
-    }
-    const tick = () => {
-      if (!document.hidden) load()
-    }
-    load()
-    const timer = setInterval(tick, 3000)
-    const onVis = () => {
-      if (!document.hidden) load()
-    }
-    document.addEventListener('visibilitychange', onVis)
-    cleanup(() => {
-      alive = false
-      clearInterval(timer)
-      document.removeEventListener('visibilitychange', onVis)
-    })
-  })
-
   return (
     <div class={styles.page}>
       <AppHeader active="panel" siteTitle={config.value?.general?.title as string ?? 'foyer'}>
@@ -253,7 +199,7 @@ export default component$(() => {
           </div>
         ) : null}
 
-        {!searchQuery.value && system.value ? <TelemetryBar system={system.value} /> : null}
+
 
         {!config.value && !error.value ? (
           <div class={['empty', 'mono', styles.loading].join(' ')}>加载中...</div>
@@ -266,7 +212,6 @@ export default component$(() => {
             {filteredBookmarkGroups.value.map((group) => (
               <BookmarkGroup group={group} key={group.id} />
             ))}
-
             {searchQuery.value &&
             filteredServiceGroups.value.length === 0 &&
             filteredBookmarkGroups.value.length === 0 ? (

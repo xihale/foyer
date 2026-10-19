@@ -7,13 +7,12 @@ import styles from './site-settings-panel.module.css'
 interface SiteSettingsPanelProps {
   siteTitle: Signal<string>
   siteDescription: Signal<string>
-  telemetryPublic: Signal<boolean>
   saving: boolean
   onSave$: PropFunction<() => void>
 }
 
 export const SiteSettingsPanel = component$<SiteSettingsPanelProps>(
-  ({ siteTitle, siteDescription, telemetryPublic, saving, onSave$ }) => {
+  ({ siteTitle, siteDescription, saving, onSave$ }) => {
     return (
       <div class={styles.wrap}>
         <PanelHead title="站点通用设置" sub="配置控制台主标题与一句话说明" />
@@ -27,16 +26,6 @@ export const SiteSettingsPanel = component$<SiteSettingsPanelProps>(
           <label class={styles.field}>
             <span class="field-label">站点描述</span>
             <input bind:value={siteDescription} maxLength={200} placeholder="一句话说明" class="input" />
-          </label>
-
-          <label class={[styles.check, 'check'].join(' ')}>
-            <input type="checkbox" bind:checked={telemetryPublic} />
-            <span>
-              <span class={styles.checkTitle}>公开主机遥测</span>
-              <span class="field-hint">
-                关闭后 /api/system（CPU/内存/磁盘/主机名/内核）仅管理会话可见，首页遥测卡对访客隐藏
-              </span>
-            </span>
           </label>
 
           <div class={styles.foot}>

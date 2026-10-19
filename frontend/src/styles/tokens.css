@@ -1,252 +1,114 @@
-/* ==========================================================================
-   foyer Design Tokens — "Swiss Modernism & Minimalism"
-   国际主义平面设计风格 (International Typographic Style / Swiss Style):
-   - 严谨网格与数学秩序 (Grid & Modularity)
-   - 纯粹排印学层级 (High-Contrast Sans-Serif & Monospace Tabular Figures)
-   - 极简中性基底 + 蓝绿主色点缀 (Monochrome Canvas + Swiss Blue-Green / Teal Accent)
-   - 几何微圆角、精细微发丝边框与扁平结构 (Hairline Structure, 0-4px Geometric Radius)
-   ========================================================================== */
+/* foyer — 门厅名牌
+   石灰石底、墨色刻字。镉橙只在离线时整行铺开。
+   在线不另设绿色：刻痕在，就是在。 */
 
 :root {
   color-scheme: light dark;
 
-  /* ================= Light: 纯粹现代冷白 (Architectural Paper White) ================= */
-  --color-canvas: #f7f8fa;
-  --color-surface: #ffffff;
-  --color-surface-subtle: #f1f3f6;
-  --color-surface-muted: #e8ebf0;
-  --color-surface-hover: #f3f5f8;
+  --color-canvas: #d9ddd4;
+  --color-surface: #e4e7dc;
+  --color-surface-subtle: #d0d5c8;
+  --color-surface-muted: #c5cbbd;
+  --color-surface-hover: #d3d8cc;
 
-  --color-text-primary: #0d0f12;
-  --color-text-secondary: #474c55;
-  --color-text-tertiary: #6e7582;
-  --color-text-quaternary: #9aa1ad;
+  --color-text-primary: #1c211c;
+  --color-text-secondary: #3e463e;
+  --color-text-tertiary: #4a524a;
+  --color-text-quaternary: #5e665c;
 
-  --color-border: #e3e6eb;
-  --color-border-subtle: #edf0f4;
-  --color-border-strong: #cfd4dc;
-  --color-border-focus: #0f766e;
+  --color-border: #b7beaf;
+  --color-border-subtle: #c9cfc2;
+  --color-border-strong: #8e9788;
+  --color-border-focus: #1c211c;
 
-  /* 蓝绿主色 (高对比度深海蓝绿: 白色背景对比度 > 5.3:1) */
-  --color-accent: #0f766e;
-  --color-accent-hover: #115e59;
-  --color-accent-subtle: rgba(15, 118, 110, 0.08);
-  --color-accent-glow: rgba(15, 118, 110, 0.2);
-  --color-on-accent: #ffffff;
+  --color-accent: #1c211c;
+  --color-accent-hover: #000000;
+  --color-accent-subtle: rgba(28, 33, 28, 0.08);
+  --color-on-accent: #e4e7dc;
 
-  --color-success: #047857;
-  --color-success-bg: #ecfdf5;
-  --color-success-border: #a7f3d0;
-  --color-success-text: #065f46;
+  --color-success: #1c211c;
+  --color-success-bg: #c5cbbd;
+  --color-success-border: #8e9788;
+  --color-success-text: #1c211c;
 
-  --color-warning: #b45309;
-  --color-warning-bg: #fffbeb;
-  --color-warning-border: #fde68a;
-  --color-warning-text: #78350f;
+  --color-warning: #8a5a12;
+  --color-warning-bg: #e6d3b0;
+  --color-warning-border: #8a5a12;
+  --color-warning-text: #5c3c0c;
 
-  --color-error: #dc2626;
-  --color-error-bg: #fef2f2;
-  --color-error-border: #fecaca;
-  --color-error-text: #991b1b;
+  --color-error: #c2410c;
+  --color-error-bg: #f0d2c2;
+  --color-error-border: #c2410c;
+  --color-error-text: #6d2408;
+  --color-on-error: #1c211c;
 
-  --color-scrim: rgba(13, 15, 18, 0.5);
+  --color-scrim: rgba(28, 33, 28, 0.46);
 
-  /* ---- Backward-compatible Material/Legacy token mapping ---- */
-  --md-sys-color-primary: var(--color-accent);
-  --md-sys-color-on-primary: var(--color-on-accent);
-  --md-sys-color-primary-container: var(--color-accent-subtle);
-  --md-sys-color-on-primary-container: var(--color-accent);
-
-  --md-sys-color-secondary: var(--color-text-secondary);
-  --md-sys-color-on-secondary: var(--color-surface);
-  --md-sys-color-secondary-container: var(--color-surface-subtle);
-  --md-sys-color-on-secondary-container: var(--color-text-primary);
-
-  --md-sys-color-tertiary: var(--color-text-tertiary);
-  --md-sys-color-on-tertiary: var(--color-surface);
-  --md-sys-color-tertiary-container: var(--color-surface-muted);
-  --md-sys-color-on-tertiary-container: var(--color-text-primary);
-
-  --md-sys-color-error: var(--color-error);
-  --md-sys-color-on-error: #ffffff;
-  --md-sys-color-error-container: var(--color-error-bg);
-  --md-sys-color-on-error-container: var(--color-error-text);
-
-  --md-sys-color-success: var(--color-success);
-  --md-sys-color-on-success: #ffffff;
-  --md-sys-color-success-container: var(--color-success-bg);
-  --md-sys-color-on-success-container: var(--color-success-text);
-
-  --md-sys-color-warning: var(--color-warning);
-  --md-sys-color-on-warning: #ffffff;
-  --md-sys-color-warning-container: var(--color-warning-bg);
-  --md-sys-color-on-warning-container: var(--color-warning-text);
-
-  --md-sys-color-background: var(--color-canvas);
-  --md-sys-color-on-background: var(--color-text-primary);
-  --md-sys-color-surface: var(--color-canvas);
-  --md-sys-color-on-surface: var(--color-text-primary);
-  --md-sys-color-surface-dim: var(--color-surface-subtle);
-  --md-sys-color-surface-bright: #ffffff;
-
-  --md-sys-color-surface-container-lowest: #ffffff;
-  --md-sys-color-surface-container-low: var(--color-surface);
-  --md-sys-color-surface-container: var(--color-surface-subtle);
-  --md-sys-color-surface-container-high: var(--color-surface-muted);
-  --md-sys-color-surface-container-highest: #dfe3ea;
-
-  --md-sys-color-surface-variant: var(--color-surface-subtle);
-  --md-sys-color-on-surface-variant: var(--color-text-secondary);
-  --md-sys-color-outline: var(--color-border-strong);
-  --md-sys-color-outline-variant: var(--color-border);
-
-  --md-sys-color-inverse-surface: #111317;
-  --md-sys-color-inverse-on-surface: #f7f8fa;
-  --md-sys-color-inverse-primary: #2dd4bf;
-  --md-sys-color-scrim: var(--color-scrim);
-
-  /* Elevation: Swiss Style focuses on razor-sharp hairlines, minimal shadows */
-  --md-sys-elevation-level0: none;
-  --md-sys-elevation-level1: none;
-  --md-sys-elevation-level2: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --md-sys-elevation-level3: 0 6px 20px rgba(0, 0, 0, 0.09);
-  --md-sys-elevation-level4: 0 16px 36px rgba(0, 0, 0, 0.14);
-
-  --text-1: var(--color-text-primary);
-  --text-2: var(--color-text-secondary);
-  --text-3: var(--color-text-tertiary);
-  --text-4: var(--color-text-quaternary);
-  --line: var(--color-border);
-  --line-2: var(--color-border-strong);
-  --line-light: var(--color-border-subtle);
-
-  --ok: var(--color-success);
-  --ok-2: var(--color-success-text);
-  --ok-glow: rgba(4, 120, 87, 0.2);
-  --warn: var(--color-warning);
-  --warn-2: var(--color-warning-text);
-  --warn-glow: rgba(180, 83, 9, 0.2);
-  --err: var(--color-error);
-  --err-2: var(--color-error-text);
-  --err-dim: var(--color-error-bg);
-  --accent: var(--color-accent);
-  --accent-2: var(--color-accent-hover);
-  --accent-dim: var(--color-accent-subtle);
-
-  --bg: var(--color-canvas);
-  --bg-1: var(--color-surface);
-  --bg-2: var(--color-surface-subtle);
-  --bg-3: var(--color-surface-muted);
-  --bg-squircle: var(--color-surface-muted);
-
-  /* ---- Swiss Style Geometric Radii ---- */
   --radius-none: 0px;
-  --radius-xs: 2px;
-  --radius-s: 3px;
-  --radius-m: 4px;
-  --radius-l: 6px;
-  --radius-xl: 8px;
-  --radius-full: 9999px;
+  --radius-xs: 0px;
+  --radius-s: 0px;
+  --radius-m: 0px;
+  --radius-l: 0px;
+  --radius-xl: 0px;
+  --radius-full: 0px;
 
-  --md-sys-shape-corner-none: 0px;
-  --md-sys-shape-corner-extra-small: 2px;
-  --md-sys-shape-corner-small: 3px;
-  --md-sys-shape-corner-medium: 4px;
-  --md-sys-shape-corner-large: 6px;
-  --md-sys-shape-corner-extra-large: 8px;
-  --md-sys-shape-corner-full: 9999px;
-
-  --shadow-sm: none;
-  --shadow-card: none;
-  --shadow-pop: 0 4px 20px rgba(0, 0, 0, 0.08);
-
-  /* ---- Typography ---- */
   --font-sans:
-    'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    'Noto Serif CJK SC', 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC',
+    'STSong', 'PMingLiU', 'Noto Serif', serif;
   --font-mono:
-    'SF Mono', Monaco, 'Cascadia Mono', 'Roboto Mono', Consolas, 'Courier New',
-    monospace;
+    'IBM Plex Mono', 'Sarasa Mono SC', ui-monospace, 'Cascadia Mono', Menlo,
+    Consolas, monospace;
 
-  --transition: 120ms cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-spring: 180ms cubic-bezier(0.16, 1, 0.3, 1);
-  --md-sys-motion-easing-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  /* 页头:bar 56px + 1px 下边框;吸顶元素按总高让位 */
+  --header-bar-h: 56px;
+  --header-h: 57px;
+
+  --ease-click: cubic-bezier(0.2, 0.9, 0.3, 1);
+  --transition: 160ms var(--ease-click);
+  --transition-spring: 220ms var(--ease-click);
 }
 
-/* ================= Dark: 结构性深石墨黑 (Architectural Obsidian) ================= */
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
 
-    --color-canvas: #0b0c0e;
-    --color-surface: #121316;
-    --color-surface-subtle: #191b20;
-    --color-surface-muted: #21242a;
-    --color-surface-hover: #1c1e24;
+    --color-canvas: #1c211c;
+    --color-surface: #242924;
+    --color-surface-subtle: #2c322c;
+    --color-surface-muted: #353b34;
+    --color-surface-hover: #30362f;
 
-    --color-text-primary: #f2f4f7;
-    --color-text-secondary: #a7adb9;
-    --color-text-tertiary: #757c8a;
-    --color-text-quaternary: #4e535e;
+    --color-text-primary: #e7eadf;
+    --color-text-secondary: #c5cbbd;
+    --color-text-tertiary: #9aa394;
+    --color-text-quaternary: #7d867c;
 
-    --color-border: #1f2229;
-    --color-border-subtle: #181a1f;
-    --color-border-strong: #303540;
-    --color-border-focus: #2dd4bf;
+    --color-border: #3a4138;
+    --color-border-subtle: #2e342d;
+    --color-border-strong: #5c655c;
+    --color-border-focus: #e7eadf;
 
-    /* 蓝绿主色暗色态 (高亮青碧绿: 暗背景对比度 > 10.9:1, 前景文本为深石墨墨黑) */
-    --color-accent: #2dd4bf;
-    --color-accent-hover: #5eead4;
-    --color-accent-subtle: rgba(45, 212, 191, 0.12);
-    --color-accent-glow: rgba(45, 212, 191, 0.25);
-    --color-on-accent: #0b0c0e;
+    --color-accent: #e7eadf;
+    --color-accent-hover: #ffffff;
+    --color-accent-subtle: rgba(231, 234, 223, 0.1);
+    --color-on-accent: #1c211c;
 
-    --color-success: #10b981;
-    --color-success-bg: rgba(16, 185, 129, 0.12);
-    --color-success-border: rgba(16, 185, 129, 0.28);
-    --color-success-text: #6ee7b7;
+    --color-success: #e7eadf;
+    --color-success-bg: #353b34;
+    --color-success-border: #5c655c;
+    --color-success-text: #e7eadf;
 
-    --color-warning: #f59e0b;
-    --color-warning-bg: rgba(245, 158, 11, 0.12);
-    --color-warning-border: rgba(245, 158, 11, 0.28);
-    --color-warning-text: #fcd34d;
+    --color-warning: #e0b15a;
+    --color-warning-bg: #3a3220;
+    --color-warning-border: #e0b15a;
+    --color-warning-text: #f0d7a0;
 
-    --color-error: #ef4444;
-    --color-error-bg: rgba(239, 68, 68, 0.12);
-    --color-error-border: rgba(239, 68, 68, 0.28);
-    --color-error-text: #fca5a5;
+    --color-error: #e07a3d;
+    --color-error-bg: #3a2a22;
+    --color-error-border: #e07a3d;
+    --color-error-text: #f3d2c4;
+    --color-on-error: #1c211c;
 
-    --color-scrim: rgba(0, 0, 0, 0.75);
-
-    --md-sys-color-background: var(--color-canvas);
-    --md-sys-color-on-background: var(--color-text-primary);
-    --md-sys-color-surface: var(--color-canvas);
-    --md-sys-color-on-surface: var(--color-text-primary);
-    --md-sys-color-surface-dim: #070809;
-    --md-sys-color-surface-bright: #2d3039;
-
-    --md-sys-color-surface-container-lowest: #0e0f12;
-    --md-sys-color-surface-container-low: var(--color-surface);
-    --md-sys-color-surface-container: var(--color-surface-subtle);
-    --md-sys-color-surface-container-high: var(--color-surface-muted);
-    --md-sys-color-surface-container-highest: #2b2f38;
-
-    --md-sys-color-surface-variant: var(--color-surface-subtle);
-    --md-sys-color-on-surface-variant: var(--color-text-secondary);
-    --md-sys-color-outline: var(--color-border-strong);
-    --md-sys-color-outline-variant: var(--color-border);
-
-    --md-sys-color-inverse-surface: #f2f4f7;
-    --md-sys-color-inverse-on-surface: #0d0f12;
-    --md-sys-color-inverse-primary: #0f766e;
-    --md-sys-color-scrim: var(--color-scrim);
-
-    --md-sys-elevation-level1: none;
-    --md-sys-elevation-level2: none;
-    --md-sys-elevation-level3: 0 8px 24px rgba(0, 0, 0, 0.6);
-    --md-sys-elevation-level4: 0 16px 40px rgba(0, 0, 0, 0.75);
-
-    --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --color-scrim: rgba(0, 0, 0, 0.62);
   }
 }
-
