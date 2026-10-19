@@ -1,6 +1,6 @@
-# foyer 用户级 systemd 单元（无需 root）
-# 安装位置：~/.config/systemd/user/foyer.service
-# 数据目录：%h/.local/state/foyer/data/foyer.db
+# foyer 用户级 systemd 单元（foyer-ci 用户，linger 常驻）
+# 由 scripts/server/deploy.sh 安装到 ~/.config/systemd/user/foyer.service
+# 数据目录：%h/.local/state/foyer/data/（db + icons，部署不触碰）
 [Unit]
 Description=foyer - homepage panel + uptime monitor
 After=network-online.target
