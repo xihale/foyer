@@ -21,5 +21,5 @@
 
 评审一轮，8/10。随后改了：监控图例和格子用同一套方块；格子等高，能数；监控列表改成和首页一样的分组顺序；在线刻痕加粗；手机上的延迟用正文色，说明用次级色；禁用的「进入」是一块静音名牌，不再发灰透明。
 
-证据：`docs/ui-rebuild/shots/home-desktop`、`home-phone`、`status-desktop`、`admin-desktop`。标杆原图在 `docs/ui-rebuild/benchmarks/`。
+证据：`docs/ui-rebuild/shots/` 下的各页截图；`layout-stable/` 记录页头固定高度、滚动后与手机断点的状态。
 没做：管理台登录后的各表单仍沿用同一套控件，没有改成另一套信息架构。404 在开发服务器里由 Vite 接管，正式环境走应用自己的页面。
