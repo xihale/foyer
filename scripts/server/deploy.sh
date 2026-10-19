@@ -54,11 +54,25 @@ rm -f "$SELF_SNAP"
 if [ ! -x "$GO_ROOT/go/bin/go" ]; then
   say "bootstrapping go $GO_VERSION into $GO_ROOT"
   mkdir -p "$GO_ROOT"
-  curl -fsSL --retry 2 "https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz" |
-    tar -xz -C "$GO_ROOT"
+  # go.dev is flaky-to-blocked from gx; the China mirrors are the reliable path.
+  for host in https://go.dev/dl https://golang.google.cn/dl \
+    https://mirrors.aliyun.com/golang; do
+    if curl -fsSL --retry 2 -o "$GO_ROOT/go.tgz" \
+      "$host/go$GO_VERSION.linux-amd64.tar.gz"; then
+      rm -rf "$GO_ROOT/go"
+      tar -xz -C "$GO_ROOT" -f "$GO_ROOT/go.tgz"
+      rm -f "$GO_ROOT/go.tgz"
+      break
+    fi
+  done
+  [ -x "$GO_ROOT/go/bin/go" ] || die "could not fetch go $GO_VERSION toolchain"
 fi
 GO="$GO_ROOT/go/bin/go"
 export GOTOOLCHAIN=local # a bumped go.mod must fail loudly, not download
+# gx egress: proxy.golang.org and go.dev are blocked from this VPS (SYN
+# blackhole, v4 and v6 alike); goproxy.cn answers in ~50ms. Override by
+# exporting GOPROXY before calling this script if that ever changes.
+export GOPROXY="${GOPROXY:-https://goproxy.cn,direct}"
 # --- user bus: webhook spawns us without a login session --------------------
 export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
