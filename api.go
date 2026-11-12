@@ -1,7 +1,9 @@
 package main
 
 import (
+	"crypto/rand"
 	"database/sql"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -23,6 +25,7 @@ type serviceOut struct {
 	GroupID          int64   `json:"group_id"`
 	MonitorIntervalS int64   `json:"monitor_interval_s"`
 	MonitorRetryMax  int64   `json:"monitor_retry_max"`
+	Mode             string  `json:"mode"`
 	Status           string  `json:"status"`
 	LatencyMs        *int64  `json:"latency_ms"`
 }
@@ -82,7 +85,7 @@ func (a *app) getConfig(w http.ResponseWriter, r *http.Request) {
 		if kind == "service" {
 			g.Services = []serviceOut{}
 			sit, err := a.db.Query(`
-SELECT id, name, icon, href, description, monitor_enabled, monitor_interval_s, monitor_retry_max
+SELECT id, name, icon, href, description, monitor_enabled, monitor_interval_s, monitor_retry_max, mode
 FROM services WHERE group_id=? ORDER BY sort`, g.ID)
 			if err == nil {
 				for sit.Next() {
@@ -90,7 +93,7 @@ FROM services WHERE group_id=? ORDER BY sort`, g.ID)
 					var icon, desc sql.NullString
 					var enabled int64
 					if err := sit.Scan(&s.ID, &s.Name, &icon, &s.Href, &desc, &enabled,
-						&s.MonitorIntervalS, &s.MonitorRetryMax); err != nil {
+						&s.MonitorIntervalS, &s.MonitorRetryMax, &s.Mode); err != nil {
 						continue
 					}
 					if icon.Valid {
@@ -442,6 +445,8 @@ type serviceIn struct {
 	MonitorEnabled   *bool   `json:"monitor_enabled"`
 	MonitorIntervalS *int64  `json:"monitor_interval_s"`
 	MonitorRetryMax  *int64  `json:"monitor_retry_max"`
+	Mode             *string `json:"mode"`
+	StaleAfterS      *int64  `json:"stale_after_s"`
 }
 
 func (b *serviceIn) applyDefaults() {
@@ -456,6 +461,14 @@ func (b *serviceIn) applyDefaults() {
 	if b.MonitorRetryMax == nil {
 		v := int64(2)
 		b.MonitorRetryMax = &v
+	}
+	if b.Mode == nil {
+		m := "active"
+		b.Mode = &m
+	}
+	if b.StaleAfterS == nil {
+		v := int64(90)
+		b.StaleAfterS = &v
 	}
 }
 
@@ -478,7 +491,54 @@ func (b *serviceIn) validate() string {
 	if *b.MonitorRetryMax < 0 || *b.MonitorRetryMax > monitorRetryMaxLim {
 		return "monitor_retry_max out of range (0-10)"
 	}
+	if *b.Mode != "active" && *b.Mode != "passive" {
+		return "mode must be active|passive"
+	}
+	if *b.StaleAfterS < staleAfterMinS || *b.StaleAfterS > staleAfterMaxS {
+		return "stale_after_s out of range (30-86400)"
+	}
 	return ""
+}
+
+// newPushToken 128bit 随机 hex：被动上报的唯一凭据（端点公开，靠熵扛爆破）。
+func newPushToken() (string, error) {
+	buf := make([]byte, 16)
+	if _, err := rand.Read(buf); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(buf), nil
+}
+
+// ===== 被动上报（POST /api/push/{token}）=====
+
+// postPush agent 上报入口：token 即凭据。message 直达公开状态页与 ntfy 正文，
+// 限长截断；body 限 2KB（agent 只报短摘要，不入库大 payload）。
+func (a *app) postPush(w http.ResponseWriter, r *http.Request) {
+	r.Body = http.MaxBytesReader(w, r.Body, 2048)
+	body, ok := decodeJSON[struct {
+		Status    string `json:"status"`
+		LatencyMs *int64 `json:"latency_ms"`
+		Message   string `json:"message"`
+	}](w, r)
+	if !ok {
+		return
+	}
+	if body == nil || (body.Status != "up" && body.Status != "down") {
+		badRequest(w, "status must be up|down")
+		return
+	}
+	msg := body.Message
+	if len(msg) > 300 {
+		msg = msg[:300]
+	}
+	if msg == "" {
+		msg = "push"
+	}
+	if !a.engine.IngestPush(r.PathValue("token"), body.Status == "up", body.LatencyMs, msg) {
+		errJSON(w, http.StatusNotFound, "unknown push token")
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"ok": true})
 }
 
 func validHTTPHref(h string) bool {
@@ -527,20 +587,37 @@ func (a *app) postService(w http.ResponseWriter, r *http.Request) {
 		badRequest(w, "group must be a service group")
 		return
 	}
+	// passive 即刻发 token；active 保持 NULL（唯一部分索引只约束非 NULL 行）
+	var token any
+	if *b.Mode == "passive" {
+		t, err := newPushToken()
+		if err != nil {
+			badRequest(w, "token gen error")
+			return
+		}
+		token = t
+	}
 	// RETURNING 取 id：共享连接上 last_insert_rowid 会与并发 INSERT（含监控
 	// 心跳写入）竞态串号，单语句内取值无窗口（审计 #10）
 	var id int64
+	var tokenOut sql.NullString
 	err := a.db.QueryRow(`
-INSERT INTO services(group_id,name,icon,href,description,sort,monitor_enabled,monitor_interval_s,monitor_retry_max)
-VALUES(?,?,?,?,?,(SELECT COALESCE(MAX(sort),0)+1 FROM services WHERE group_id=?),?,?,?) RETURNING id`,
+INSERT INTO services(group_id,name,icon,href,description,sort,monitor_enabled,monitor_interval_s,monitor_retry_max,mode,push_token,stale_after_s)
+VALUES(?,?,?,?,?,(SELECT COALESCE(MAX(sort),0)+1 FROM services WHERE group_id=?),?,?,?,?,?,?)
+RETURNING id, push_token`,
 		b.GroupID, b.Name, b.Icon, b.Href, b.Description, b.GroupID,
-		*b.MonitorEnabled, *b.MonitorIntervalS, *b.MonitorRetryMax).Scan(&id)
+		*b.MonitorEnabled, *b.MonitorIntervalS, *b.MonitorRetryMax,
+		*b.Mode, token, *b.StaleAfterS).Scan(&id, &tokenOut)
 	if err != nil {
 		badRequest(w, "db error")
 		return
 	}
 	a.engine.Sync() // 新服务进入探测
-	writeJSON(w, http.StatusOK, map[string]any{"ok": true, "id": id})
+	resp := map[string]any{"ok": true, "id": id}
+	if tokenOut.Valid {
+		resp["push_token"] = tokenOut.String
+	}
+	writeJSON(w, http.StatusOK, resp)
 }
 
 func (a *app) putService(w http.ResponseWriter, r *http.Request) {
@@ -561,6 +638,23 @@ func (a *app) putService(w http.ResponseWriter, r *http.Request) {
 		badRequest(w, "invalid json")
 		return
 	}
+	// mode/stale 允许缺省：管理前端尚未渲染被动字段，PUT 不得把 passive 打回 active。
+	// 缺省值从现值取，保证 PUT 后与 PUT 前行为一致。
+	var curMode string
+	var curStale int64
+	var curToken sql.NullString
+	if err := a.db.QueryRow(
+		`SELECT mode, stale_after_s, push_token FROM services WHERE id=?`, id,
+	).Scan(&curMode, &curStale, &curToken); err != nil {
+		badRequest(w, "not found")
+		return
+	}
+	if b.Mode == nil {
+		b.Mode = &curMode
+	}
+	if b.StaleAfterS == nil {
+		b.StaleAfterS = &curStale
+	}
 	b.applyDefaults()
 	if msg := b.validate(); msg != "" {
 		badRequest(w, msg)
@@ -570,16 +664,34 @@ func (a *app) putService(w http.ResponseWriter, r *http.Request) {
 		badRequest(w, "group must be a service group")
 		return
 	}
+	// token 生命周期：转入 passive 且尚无 token 时新发；切回 active 即作废；
+	// passive 内的普通编辑不动 token，agent 不因改名/改周期而断报
+	token := curToken
+	if *b.Mode == "passive" && !curToken.Valid {
+		t, err := newPushToken()
+		if err != nil {
+			badRequest(w, "token gen error")
+			return
+		}
+		token = sql.NullString{String: t, Valid: true}
+	} else if *b.Mode == "active" {
+		token = sql.NullString{}
+	}
 	if _, err := a.db.Exec(`
 UPDATE services SET group_id=?,name=?,icon=?,href=?,description=?,
-monitor_enabled=?,monitor_interval_s=?,monitor_retry_max=? WHERE id=?`,
+monitor_enabled=?,monitor_interval_s=?,monitor_retry_max=?,mode=?,push_token=?,stale_after_s=? WHERE id=?`,
 		b.GroupID, b.Name, b.Icon, b.Href, b.Description,
-		*b.MonitorEnabled, *b.MonitorIntervalS, *b.MonitorRetryMax, id); err != nil {
+		*b.MonitorEnabled, *b.MonitorIntervalS, *b.MonitorRetryMax,
+		*b.Mode, token, *b.StaleAfterS, id); err != nil {
 		badRequest(w, "db error")
 		return
 	}
 	a.engine.Sync() // 周期/启停变化即时对账
-	writeJSON(w, http.StatusOK, map[string]any{"ok": true})
+	resp := map[string]any{"ok": true}
+	if token.Valid {
+		resp["push_token"] = token.String
+	}
+	writeJSON(w, http.StatusOK, resp)
 }
 
 func (a *app) deleteService(w http.ResponseWriter, r *http.Request) {

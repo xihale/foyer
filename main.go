@@ -197,6 +197,7 @@ func (a *app) routes() http.Handler {
 	mux.HandleFunc("GET /api/config", a.getConfig)
 	mux.HandleFunc("GET /api/events", a.getEvents)
 	mux.HandleFunc("GET /api/status", a.getStatus)
+	mux.HandleFunc("POST /api/push/{token}", a.postPush) // 被动上报：token 即凭据
 
 	// 认证与管理（/admin 用）
 	mux.HandleFunc("POST /api/login", a.postLogin)

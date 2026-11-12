@@ -22,6 +22,8 @@ const (
 	monitorIntervalMinS = int64(30)
 	monitorIntervalMaxS = int64(86400)
 	monitorRetryMaxLim  = int64(10)
+	staleAfterMinS      = int64(30)        // 被动死信窗口下限
+	staleAfterMaxS      = int64(86400)     // 被动死信窗口上限
 	maxProbes           = 16               // 全局在飞探测上限
 	probeTimeout        = 10 * time.Second // 单次 HTTP 探测超时
 	retryGap            = 5 * time.Second  // 失败重试间隔
@@ -56,10 +58,19 @@ type sub struct {
 	ch chan []byte
 }
 
-// probeLoop 单个服务的常驻探测循环句柄。
+// probeLoop 单个服务的常驻循环句柄（active=主动探测，passive=死信看门狗）。
 type probeLoop struct {
-	interval time.Duration
+	interval time.Duration // active：探测周期
+	stale    time.Duration // passive：死信窗口
+	passive  bool
 	cancel   context.CancelFunc
+}
+
+// loopSpec Sync 现读的服务循环参数，与在跑循环逐项比对，有变即重启。
+type loopSpec struct {
+	interval time.Duration
+	stale    time.Duration
+	passive  bool
 }
 
 type engine struct {
@@ -157,7 +168,7 @@ func (e *engine) housekeeping() {
 }
 
 // Sync 把在跑的探测循环与 DB 对账：
-// 新启用的启动循环（错峰后立即首查）、周期变更的重启（立即复查）、
+// 新启用的启动循环（错峰后立即首查）、周期/模式/死信窗口变更的重启（立即复查）、
 // 停用/删除的取消并清内存态。幂等，服务 CRUD 后调用。
 func (e *engine) Sync() {
 	e.syncMu.Lock()
@@ -166,32 +177,41 @@ func (e *engine) Sync() {
 		return // 已停机，不再往 wg 里加东西
 	}
 
-	enabled := make(map[int64]time.Duration)
-	rows, err := e.db.Query(`SELECT id, monitor_interval_s FROM services WHERE monitor_enabled=1`)
+	enabled := make(map[int64]loopSpec)
+	rows, err := e.db.Query(`SELECT id, monitor_interval_s, mode, stale_after_s FROM services WHERE monitor_enabled=1`)
 	if err != nil {
 		return // 读库失败：维持现状，等下次对账
 	}
 	for rows.Next() {
-		var id, sec int64
-		if err := rows.Scan(&id, &sec); err == nil {
-			enabled[id] = clampInterval(sec)
+		var id, sec, staleS int64
+		var mode string
+		if err := rows.Scan(&id, &sec, &mode, &staleS); err == nil {
+			enabled[id] = loopSpec{
+				interval: clampInterval(sec),
+				stale:    time.Duration(clampRange(staleS, staleAfterMinS, staleAfterMaxS)) * time.Second,
+				passive:  mode == "passive",
+			}
 		}
 	}
 	rows.Close()
 
 	e.loopsMu.Lock()
-	for id, interval := range enabled {
+	for id, spec := range enabled {
 		l, ok := e.loops[id]
-		if ok && l.interval == interval {
+		if ok && l.interval == spec.interval && l.stale == spec.stale && l.passive == spec.passive {
 			continue
 		}
 		if ok {
-			l.cancel() // 周期变了：重启该服务的循环
+			l.cancel() // 周期/模式/窗口变更：重启该服务的循环
 		}
 		ctx, cancel := context.WithCancel(e.ctx)
-		e.loops[id] = &probeLoop{interval: interval, cancel: cancel}
+		e.loops[id] = &probeLoop{interval: spec.interval, stale: spec.stale, passive: spec.passive, cancel: cancel}
 		e.wg.Add(1)
-		go e.probeLoop(ctx, id, interval, !ok) // 新面孔错峰首查
+		if spec.passive {
+			go e.watchdogLoop(ctx, id, spec.stale)
+		} else {
+			go e.probeLoop(ctx, id, spec.interval, !ok) // 新面孔错峰首查
+		}
 	}
 	var removed []int64
 	for id, l := range e.loops {
@@ -293,6 +313,76 @@ func (e *engine) check(ctx context.Context, id int64) {
 		}
 	}
 	e.finishCheck(id, name, up, latency, startMs, msg)
+}
+
+// watchdogLoop 被动服务的死信看门狗：push 断流超过 stale 判 DOWN。
+// 首查延后一个 stale 窗口，给刚启用的 agent 留上报时间；之后按 stale/3（夹到
+// [10s,60s]）轮询。down 态不重复落心跳，等 push 恢复走正常翻转。
+func (e *engine) watchdogLoop(ctx context.Context, id int64, stale time.Duration) {
+	defer e.wg.Done()
+	select {
+	case <-ctx.Done():
+		return
+	case <-time.After(stale):
+	}
+	tick := time.Duration(clampRange(int64(stale/time.Second)/3, 10, 60)) * time.Second
+	t := time.NewTicker(tick)
+	defer t.Stop()
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-t.C:
+			if !e.checkStale(id, stale) {
+				return
+			}
+		}
+	}
+}
+
+// checkStale 一轮死信检查；返回 false 表示服务已删/已停用（循环终止）。
+// 从未上报过(unknown)只落临时 down 不推送不建事故——接入期静默，首条 push 走正常翻转。
+func (e *engine) checkStale(id int64, stale time.Duration) bool {
+	var name string
+	if err := e.db.QueryRow(
+		`SELECT name FROM services WHERE id=? AND monitor_enabled=1 AND mode='passive'`, id,
+	).Scan(&name); err != nil {
+		return false
+	}
+	e.statesMu.RLock()
+	st, last := e.states[id].status, e.states[id].lastChecked
+	e.statesMu.RUnlock()
+	nowMs := time.Now().UnixMilli()
+	if st == statusUnknown && last == 0 {
+		e.statesMu.Lock()
+		if e.states[id].status == statusUnknown {
+			e.states[id] = monitorState{status: statusDown, lastChecked: nowMs}
+		}
+		e.statesMu.Unlock()
+		return true
+	}
+	if st == statusDown {
+		return true
+	}
+	if nowMs-last <= stale.Milliseconds() {
+		return true // 上报新鲜
+	}
+	e.finishCheck(id, name, false, nil, nowMs, fmt.Sprintf("Stale: no push for %ds", int64(stale.Seconds())))
+	return true
+}
+
+// IngestPush 被动上报入口：按 token 找启用的 passive 服务，
+// 复用 finishCheck 全套落库/事故/通知/SSE 语义。返回是否命中。
+func (e *engine) IngestPush(token string, up bool, latency *int64, msg string) bool {
+	var id int64
+	var name string
+	if err := e.db.QueryRow(
+		`SELECT id, name FROM services WHERE push_token=? AND mode='passive' AND monitor_enabled=1`,
+		token).Scan(&id, &name); err != nil {
+		return false
+	}
+	e.finishCheck(id, name, up, latency, time.Now().UnixMilli(), msg)
+	return true
 }
 
 // finishCheck 落心跳、维护事故与内存态、翻转时推送通知并广播 SSE 帧。

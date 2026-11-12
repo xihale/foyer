@@ -23,7 +23,11 @@ CREATE TABLE IF NOT EXISTS services (
   sort               INTEGER NOT NULL DEFAULT 0,
   monitor_enabled    INTEGER NOT NULL DEFAULT 0,
   monitor_interval_s INTEGER NOT NULL DEFAULT 300,
-  monitor_retry_max  INTEGER NOT NULL DEFAULT 2
+  monitor_retry_max  INTEGER NOT NULL DEFAULT 2,
+  -- 被动探测：agent 定期 push，引擎只做死信裁决（见 monitor.go watchdogLoop）
+  mode               TEXT NOT NULL DEFAULT 'active',
+  push_token         TEXT,
+  stale_after_s      INTEGER NOT NULL DEFAULT 90
 );
 CREATE INDEX IF NOT EXISTS idx_services_group ON services(group_id, sort);
 
